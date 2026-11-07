@@ -1,0 +1,2095 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #292d27;
+  background: #f7f5ec;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --forest: #244c38;
+  --sage: #829b79;
+  --cream: #f7f5ec;
+  --gold: #c5a66a;
+  --charcoal: #292d27;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+.section-padding {
+  padding: 110px 8%;
+}
+
+.eyebrow {
+  display: inline-block;
+  color: var(--sage);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  margin-bottom: 20px;
+}
+
+/* NAVIGATION */
+
+.navbar {
+  height: 88px;
+  width: 100%;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8%;
+  position: relative;
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  color: var(--forest);
+  line-height: 1;
+}
+
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 5px;
+}
+
+.brand-subtitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-top: 7px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.nav-links a {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555b50;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--forest);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cart-link {
+  color: var(--forest);
+  display: flex;
+}
+
+.menu-toggle {
+  display: none;
+  border: none;
+  background: transparent;
+  color: var(--forest);
+  cursor: pointer;
+}
+
+/* BUTTONS */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 25px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: 0.3s;
+}
+
+.button-light {
+  background: var(--cream);
+  color: var(--forest);
+}
+
+.button-light:hover {
+  background: var(--gold);
+  color: white;
+}
+
+.text-link,
+.hero-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+.text-link {
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 8px;
+}
+
+.text-link:hover {
+  gap: 16px;
+}
+
+/* HERO */
+
+.hero {
+  height: 690px;
+  min-height: 580px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background:
+    url('https://images.unsplash.com/photo-1545241047-6083a3684587?w=2000')
+    center 55% / cover no-repeat;
+  color: white;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(14, 34, 24, 0.78),
+    rgba(14, 34, 24, 0.30) 65%,
+    rgba(14, 34, 24, 0.10)
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  padding-left: 12%;
+  padding-bottom: 30px;
+}
+
+.hero-eyebrow {
+  color: #e2d1a5;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(52px, 6vw, 82px);
+  line-height: 1.12;
+  font-weight: 400;
+  margin-bottom: 25px;
+}
+
+.hero-content > p {
+  max-width: 470px;
+  color: #e8e8df;
+  font-size: 15px;
+  line-height: 1.9;
+  margin-bottom: 32px;
+}
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.hero-text-link {
+  color: white;
+}
+
+.hero-bottom {
+  position: absolute;
+  z-index: 2;
+  bottom: 25px;
+  left: 8%;
+  right: 8%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #eee9d8;
+}
+
+/* INTRODUCTION */
+
+.intro-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.intro-image {
+  position: relative;
+}
+
+.intro-image img {
+  height: 520px;
+}
+
+.image-caption {
+  position: absolute;
+  right: -20px;
+  bottom: 25px;
+  padding: 18px 25px;
+  background: var(--cream);
+  color: var(--forest);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
+.intro-content h2,
+.section-heading h2,
+.values-heading h2,
+.journey-content h2,
+.closing-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 4vw, 52px);
+  line-height: 1.2;
+  font-weight: 400;
+  color: var(--forest);
+}
+
+.intro-content > p {
+  color: #686e63;
+  font-size: 14px;
+  line-height: 2;
+  margin: 25px 0;
+}
+
+.intro-content .text-link {
+  margin-top: 15px;
+}
+
+/* COLLECTION */
+
+.collection-section {
+  background: #eeeee4;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 45px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.product-card {
+  background: var(--cream);
+}
+
+.product-image {
+  display: block;
+  height: 350px;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image img {
+  height: 100%;
+  transition: transform 0.5s;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.06);
+}
+
+.product-explore {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  background: var(--cream);
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.product-info {
+  padding: 27px 25px 30px;
+}
+
+.product-info .eyebrow {
+  font-size: 9px;
+  margin-bottom: 12px;
+}
+
+.product-info h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--forest);
+  font-size: 23px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.product-info p {
+  color: #74786e;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* JOURNEY */
+
+.journey-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 560px;
+  background: var(--forest);
+}
+
+.journey-image {
+  background:
+    url('https://images.unsplash.com/photo-1563911892437-1feda0179e1b?w=1200')
+    center / cover no-repeat;
+}
+
+.journey-content {
+  padding: 100px 12%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.journey-content .eyebrow {
+  color: var(--gold);
+}
+
+.journey-content h2 {
+  color: var(--cream);
+  margin-bottom: 25px;
+}
+
+.journey-content p {
+  color: #d5dfd4;
+  font-size: 14px;
+  line-height: 2;
+  max-width: 450px;
+  margin-bottom: 30px;
+}
+
+/* VALUES */
+
+.values-section {
+  text-align: center;
+}
+
+.values-heading {
+  max-width: 600px;
+  margin: 0 auto 65px;
+}
+
+.values-heading > p {
+  color: #74786e;
+  line-height: 1.9;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 35px;
+}
+
+.value-card {
+  padding: 20px;
+}
+
+.value-card svg {
+  color: var(--sage);
+  width: 34px;
+  height: 34px;
+  margin: 0 auto 25px;
+  stroke-width: 1.3;
+}
+
+.value-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--forest);
+  margin-bottom: 15px;
+}
+
+.value-card p {
+  color: #777c72;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+/* CLOSING SECTION */
+
+.closing-section {
+  padding: 100px 20px;
+  text-align: center;
+  background:
+    linear-gradient(rgba(25, 58, 39, 0.83), rgba(25, 58, 39, 0.83)),
+    url('https://images.unsplash.com/photo-1545241047-6083a3684587?w=1600')
+    center / cover;
+}
+
+.closing-section .eyebrow {
+  color: var(--gold);
+}
+
+.closing-section h2 {
+  color: white;
+  margin-bottom: 30px;
+}
+
+/* FOOTER */
+
+.footer {
+  background: #1c382a;
+  color: #e5e9df;
+  padding: 75px 8% 25px;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
+  gap: 55px;
+  padding-bottom: 60px;
+}
+
+.footer-brand h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  letter-spacing: 5px;
+  font-weight: 500;
+}
+
+.footer-brand > span {
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.footer-brand > p {
+  max-width: 270px;
+  margin: 25px 0;
+  font-size: 12px;
+  line-height: 1.9;
+  color: #c0ccbf;
+}
+
+.social-links {
+  display: flex;
+  gap: 18px;
+}
+
+.social-links a {
+  color: #e5e9df;
+}
+
+.social-links svg {
+  width: 18px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 17px;
+}
+
+.footer-column h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #e8d9b3;
+}
+
+.footer-column a,
+.footer-column p {
+  font-size: 11px;
+  color: #c0ccbf;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.footer-column a:hover {
+  color: white;
+}
+
+.footer-column svg {
+  flex-shrink: 0;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #b7c3b5;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 1000px) {
+  .navbar {
+    padding: 0 5%;
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  .section-padding {
+    padding: 80px 6%;
+  }
+
+  .intro-section {
+    gap: 45px;
+  }
+
+  .footer-main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .navbar {
+    height: 75px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 75px;
+    left: 0;
+    width: 100%;
+    padding: 25px 8%;
+    background: var(--cream);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 25px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .hero {
+    height: 650px;
+    min-height: 550px;
+    background-position: center;
+  }
+
+  .hero-content {
+    padding: 0 8%;
+  }
+
+  .hero h1 {
+    font-size: 55px;
+  }
+
+  .hero-bottom span:last-child {
+    display: none;
+  }
+
+  .intro-section,
+  .journey-section {
+    grid-template-columns: 1fr;
+  }
+
+  .intro-image img {
+    height: 380px;
+  }
+
+  .intro-content {
+    padding-top: 20px;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-image {
+    height: 380px;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .journey-image {
+    min-height: 350px;
+  }
+
+  .journey-content {
+    padding: 70px 8%;
+  }
+
+  .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 45px;
+  }
+
+  .hero-buttons {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .image-caption {
+    right: 0;
+  }
+}
+  
+
+/* ==========================================
+   HOPE TEA ESTATE - ABOUT PAGE
+   Isolated styles
+========================================== */
+
+.estate-about {
+  --ea-green: #263d2d;
+  --ea-dark: #1b2b21;
+  --ea-cream: #f6f5ef;
+  --ea-gold: #b79b64;
+  --ea-text: #62695f;
+  background: var(--ea-cream);
+  color: var(--ea-green);
+  overflow: hidden;
+}
+
+.estate-about * {
+  box-sizing: border-box;
+}
+
+/* HERO */
+
+.estate-about-hero {
+  height: 680px;
+  min-height: 560px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: white;
+  background: var(--ea-dark);
+}
+
+.estate-about-hero-image {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(13, 29, 19, 0.76),
+      rgba(13, 29, 19, 0.12)
+    ),
+    linear-gradient(
+      0deg,
+      rgba(13, 29, 19, 0.35),
+      transparent 50%
+    ),
+    url("https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=90&w=2200")
+    center 55% / cover no-repeat;
+}
+
+.estate-about-hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(1150px, 88%);
+  margin: 0 auto;
+  padding-top: 30px;
+}
+
+.estate-about-hero-content > span,
+.estate-about-landscape-content > span,
+.estate-about-closing-content > span {
+  color: #d2bd8c;
+  font-size: 10px;
+  letter-spacing: 4px;
+  font-weight: 700;
+}
+
+.estate-about-hero h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(52px, 7vw, 88px);
+  line-height: 1.08;
+  font-weight: 400;
+  margin: 28px 0;
+  color: white;
+}
+
+.estate-about-hero h1 i,
+.estate-about-landscape h2 i,
+.estate-about-story-text h2 i,
+.estate-about-values h2 i,
+.estate-about-closing h2 i {
+  font-weight: 400;
+  color: #d4bd8c;
+}
+
+.estate-about-hero-content p {
+  max-width: 440px;
+  font-size: 15px;
+  line-height: 1.9;
+  color: #e5e8df;
+}
+
+.estate-about-scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 45px;
+  color: white;
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.estate-about-hero-caption {
+  position: absolute;
+  bottom: 35px;
+  right: 6%;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: white;
+}
+
+
+/* STORY */
+
+.estate-about-story {
+  padding: 115px 7%;
+}
+
+.estate-about-story-label {
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto 45px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ea-gold);
+}
+
+.estate-about-story-grid {
+  max-width: 1150px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 95px;
+  align-items: center;
+}
+
+.estate-about-story-image {
+  position: relative;
+}
+
+.estate-about-story-image img {
+  width: 100%;
+  height: 550px;
+  object-fit: cover;
+  display: block;
+}
+
+.estate-about-image-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 16px 20px;
+  background: var(--ea-green);
+  color: white;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.estate-about-kicker {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ea-gold);
+  font-weight: 700;
+}
+
+.estate-about-story-text h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(38px, 4vw, 54px);
+  line-height: 1.2;
+  font-weight: 400;
+  margin: 24px 0;
+}
+
+.estate-about-story-text h2 i {
+  color: #899a79;
+}
+
+.estate-about-story-text p {
+  font-size: 14px;
+  line-height: 2;
+  color: var(--ea-text);
+  margin-bottom: 18px;
+}
+
+.estate-about-signature {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 38px;
+  padding-top: 23px;
+  border-top: 1px solid #d9d8cc;
+}
+
+.estate-about-signature span {
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+.estate-about-signature small {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #899078;
+}
+
+
+/* LANDSCAPE */
+
+.estate-about-landscape {
+  min-height: 590px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: white;
+  background: var(--ea-dark);
+}
+
+.estate-about-landscape-image {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(18, 36, 24, 0.88),
+      rgba(18, 36, 24, 0.2)
+    ),
+    url("https://images.unsplash.com/photo-1563911892437-1feda0179e1b?q=90&w=2200")
+    center / cover no-repeat;
+}
+
+.estate-about-landscape-content {
+  position: relative;
+  width: min(1150px, 86%);
+  margin: auto;
+  padding: 90px 0;
+}
+
+.estate-about-landscape h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(45px, 6vw, 70px);
+  line-height: 1.15;
+  font-weight: 400;
+  color: white;
+  margin: 28px 0;
+}
+
+.estate-about-landscape p {
+  max-width: 480px;
+  font-size: 14px;
+  line-height: 2;
+  color: #e0e5db;
+}
+
+.estate-about-location {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 40px;
+  color: #d4bd8c;
+}
+
+.estate-about-location span {
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+
+/* VALUES */
+
+.estate-about-values {
+  padding: 120px 7%;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.estate-about-values-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 50px;
+  margin-bottom: 65px;
+}
+
+.estate-about-values-heading > div > span {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ea-gold);
+}
+
+.estate-about-values h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(42px, 5vw, 62px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-top: 22px;
+}
+
+.estate-about-values h2 i {
+  color: #899a79;
+}
+
+.estate-about-values-heading > p {
+  max-width: 330px;
+  color: var(--ea-text);
+  font-size: 13px;
+  line-height: 1.9;
+  padding-bottom: 8px;
+}
+
+.estate-about-value-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #d9d8cc;
+  border-bottom: 1px solid #d9d8cc;
+}
+
+.estate-about-value-card {
+  position: relative;
+  padding: 45px 32px;
+  border-right: 1px solid #d9d8cc;
+}
+
+.estate-about-value-card:last-child {
+  border-right: none;
+}
+
+.estate-about-value-number {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ea-gold);
+  margin-bottom: 40px;
+}
+
+.estate-about-value-card > svg {
+  color: #82916d;
+  margin-bottom: 24px;
+}
+
+.estate-about-value-card h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.estate-about-value-card p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--ea-text);
+}
+
+
+/* CLOSING */
+
+.estate-about-closing {
+  min-height: 560px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  background: var(--ea-dark);
+}
+
+.estate-about-closing-image {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      rgba(16, 34, 22, 0.76),
+      rgba(16, 34, 22, 0.76)
+    ),
+    url("https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=90&w=2000")
+    center / cover no-repeat;
+}
+
+.estate-about-closing-content {
+  position: relative;
+  padding: 90px 20px;
+}
+
+.estate-about-closing h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(43px, 6vw, 70px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 28px 0;
+  color: white;
+}
+
+.estate-about-closing-content p {
+  color: #e0e5db;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 35px;
+}
+
+.estate-about-closing-content a {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  background: #d4bd8c;
+  color: #243d2b;
+  padding: 17px 25px;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  transition: 0.3s;
+}
+
+.estate-about-closing-content a:hover {
+  background: white;
+  transform: translateY(-3px);
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .estate-about-story-grid {
+    gap: 45px;
+  }
+
+  .estate-about-story-image img {
+    height: 450px;
+  }
+
+  .estate-about-values-heading {
+    align-items: start;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 650px) {
+  .estate-about-hero {
+    height: 600px;
+    min-height: 500px;
+  }
+
+  .estate-about-hero-content {
+    width: 88%;
+  }
+
+  .estate-about-story {
+    padding: 75px 7%;
+  }
+
+  .estate-about-story-grid {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .estate-about-story-image img {
+    height: 380px;
+  }
+
+  .estate-about-landscape {
+    min-height: 500px;
+  }
+
+  .estate-about-values {
+    padding: 80px 7%;
+  }
+
+  .estate-about-value-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .estate-about-value-card {
+    border-right: none;
+    border-bottom: 1px solid #d9d8cc;
+    padding: 35px 15px;
+  }
+
+  .estate-about-value-card:last-child {
+    border-bottom: none;
+  }
+
+  .estate-about-value-number {
+    margin-bottom: 25px;
+  }
+
+  .estate-about-closing {
+    min-height: 480px;
+  }
+}
+
+/* ==========================================
+   HOPE TEA ESTATE - TEA COLLECTION
+========================================== */
+
+.tea-collection {
+  --tc-green: #263d2d;
+  --tc-dark: #1b2b21;
+  --tc-cream: #f6f5ef;
+  --tc-gold: #b79b64;
+  --tc-text: #70766c;
+
+  background: var(--tc-cream);
+  color: var(--tc-green);
+  overflow: hidden;
+}
+
+.tea-collection * {
+  box-sizing: border-box;
+}
+
+/* HERO */
+
+.collection-hero {
+  height: 640px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--tc-dark);
+  color: white;
+}
+
+.collection-hero-image {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(15, 31, 20, .78), rgba(15, 31, 20, .12)),
+    url("https://images.unsplash.com/photo-1563911892437-1feda0179e1b?q=90&w=2200")
+    center 55% / cover no-repeat;
+}
+
+.collection-hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(1150px, 88%);
+  margin: auto;
+}
+
+.collection-hero-content > span,
+.collection-experience-content > span,
+.collection-closing > span {
+  color: #d2bd8c;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.collection-hero h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(52px, 7vw, 85px);
+  line-height: 1.1;
+  font-weight: 400;
+  color: white;
+  margin: 27px 0;
+}
+
+.collection-hero h1 i,
+.collection-intro h2 i,
+.collection-experience h2 i {
+  color: #d4bd8c;
+  font-weight: 400;
+}
+
+.collection-hero-content p {
+  max-width: 460px;
+  font-size: 14px;
+  line-height: 1.9;
+  color: #e5e8df;
+}
+
+.collection-hero-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 38px;
+  color: white;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  border-bottom: 1px solid #d4bd8c;
+  padding-bottom: 12px;
+}
+
+.collection-hero-caption {
+  position: absolute;
+  right: 6%;
+  bottom: 30px;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: white;
+}
+
+/* INTRO */
+
+.collection-intro {
+  text-align: center;
+  max-width: 650px;
+  margin: auto;
+  padding: 100px 20px 65px;
+}
+
+.collection-intro > span,
+.collection-products-heading > div > span {
+  color: var(--tc-gold);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.collection-intro h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(38px, 5vw, 55px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 23px 0;
+}
+
+.collection-intro h2 i {
+  color: #899a79;
+}
+
+.collection-intro p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--tc-text);
+}
+
+/* PRODUCT SECTION */
+
+.collection-products {
+  width: min(1200px, 90%);
+  margin: auto;
+  padding: 30px 0 110px;
+}
+
+.collection-products-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  border-bottom: 1px solid #deddd2;
+  padding-bottom: 28px;
+}
+
+.collection-products-heading h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 35px;
+  font-weight: 400;
+  margin-top: 12px;
+}
+
+.collection-products-heading > p {
+  color: var(--tc-text);
+  font-size: 12px;
+}
+
+/* FILTERS */
+
+.collection-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 28px 0 35px;
+}
+
+.collection-filters button {
+  border: 1px solid #d8d8ca;
+  background: transparent;
+  color: #60685d;
+  padding: 12px 19px;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.collection-filters button:hover,
+.collection-filters button.active {
+  background: var(--tc-green);
+  color: white;
+  border-color: var(--tc-green);
+}
+
+/* PRODUCT GRID */
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 38px 25px;
+}
+
+.collection-product-card {
+  min-width: 0;
+  background: transparent;
+}
+
+.collection-product-image {
+  height: 340px;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #e8e8df;
+}
+
+.collection-product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s ease;
+}
+
+.collection-product-card:hover .collection-product-image img {
+  transform: scale(1.06);
+}
+
+.collection-product-tag {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--tc-cream);
+  color: var(--tc-green);
+  padding: 9px 12px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+
+.collection-product-info {
+  padding: 22px 3px 0;
+}
+
+.collection-product-category {
+  display: block;
+  color: #9a885e;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.collection-product-name {
+  display: inline-block;
+  font-family: "Playfair Display", serif;
+  font-size: 23px;
+  color: var(--tc-green);
+  text-decoration: none;
+}
+
+.collection-product-info > p {
+  color: var(--tc-text);
+  font-size: 12px;
+  line-height: 1.8;
+  min-height: 43px;
+  margin: 12px 0 20px;
+}
+
+.collection-product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #deddd2;
+  padding-top: 17px;
+}
+
+.collection-product-bottom > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.collection-product-bottom strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tc-green);
+}
+
+.collection-product-bottom small {
+  font-size: 10px;
+  color: #85897e;
+}
+
+.collection-product-bottom button {
+  height: 39px;
+  width: 39px;
+  border: 1px solid var(--tc-green);
+  background: transparent;
+  color: var(--tc-green);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.collection-product-bottom button:hover,
+.collection-product-bottom button.added {
+  background: var(--tc-green);
+  color: white;
+}
+
+.collection-added-message {
+  display: block;
+  color: #58764c;
+  font-size: 10px;
+  margin-top: 10px;
+}
+
+.collection-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--tc-text);
+}
+
+/* EXPERIENCE BANNER */
+
+.collection-experience {
+  min-height: 550px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--tc-dark);
+  color: white;
+}
+
+.collection-experience-image {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(16, 34, 22, .87), rgba(16, 34, 22, .2)),
+    url("https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=90&w=2000")
+    center / cover no-repeat;
+}
+
+.collection-experience-content {
+  position: relative;
+  width: min(1150px, 86%);
+  margin: auto;
+  padding: 85px 0;
+}
+
+.collection-experience h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(45px, 6vw, 70px);
+  line-height: 1.15;
+  font-weight: 400;
+  color: white;
+  margin: 25px 0;
+}
+
+.collection-experience-content p {
+  max-width: 470px;
+  font-size: 14px;
+  line-height: 1.9;
+  color: #e0e5db;
+}
+
+.collection-experience-content a {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 32px;
+  color: #e2c991;
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* CLOSING */
+
+.collection-closing {
+  text-align: center;
+  padding: 90px 20px;
+}
+
+.collection-closing > span {
+  color: var(--tc-gold);
+}
+
+.collection-closing h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(32px, 5vw, 49px);
+  font-weight: 400;
+  margin: 22px 0 12px;
+}
+
+.collection-closing p {
+  font-size: 13px;
+  color: var(--tc-text);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .collection-product-image {
+    height: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .collection-hero {
+    height: 560px;
+  }
+
+  .collection-intro {
+    padding-top: 75px;
+  }
+
+  .collection-products {
+    width: 90%;
+  }
+
+  .collection-products-heading {
+    align-items: start;
+    gap: 15px;
+    flex-direction: column;
+  }
+
+  .collection-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .collection-product-image {
+    height: 360px;
+  }
+
+  .collection-filters {
+    gap: 8px;
+  }
+
+  .collection-filters button {
+    padding: 10px 13px;
+  }
+
+  .collection-experience {
+    min-height: 480px;
+  }
+}
+
+/* =========================================
+   PRODUCT DETAILS PAGE
+========================================= */
+
+.product-details-page {
+  background: #faf9f5;
+  color: #263d2d;
+  min-height: 100vh;
+}
+
+.product-breadcrumb {
+  padding: 28px 8%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  color: #8b9388;
+  font-size: 12px;
+}
+
+.product-breadcrumb a {
+  color: #667568;
+  text-decoration: none;
+}
+
+.product-breadcrumb a:hover {
+  color: #b18b4b;
+}
+
+.product-main {
+  padding: 35px 8% 110px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 85px;
+  align-items: start;
+}
+
+.product-main-image {
+  height: 590px;
+  position: relative;
+  overflow: hidden;
+  background: #e9e8df;
+}
+
+.product-main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.product-main-image:hover img {
+  transform: scale(1.04);
+}
+
+.product-main-image > span {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: #f8f5eb;
+  color: #314c38;
+  padding: 10px 16px;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.product-image-caption {
+  margin-top: 17px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #92968c;
+}
+
+.product-information {
+  padding-top: 35px;
+}
+
+.product-eyebrow,
+.product-tasting > div:first-child > span,
+.product-related-heading > div > span {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #a58a59;
+}
+
+.product-information h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(38px, 4vw, 55px);
+  line-height: 1.15;
+  font-weight: 400;
+  margin: 22px 0;
+  color: #263d2d;
+}
+
+.product-description {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #747b70;
+  max-width: 490px;
+}
+
+.product-price {
+  font-family: "Playfair Display", serif;
+  font-size: 29px;
+  margin-top: 32px;
+  color: #314b36;
+}
+
+.product-weight {
+  color: #90968b;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.product-divider {
+  height: 1px;
+  background: #e6e5dc;
+  margin: 30px 0;
+}
+
+.product-quantity-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.product-quantity-section > span {
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.product-quantity-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dedfd5;
+  height: 45px;
+}
+
+.product-quantity-control button {
+  width: 42px;
+  height: 43px;
+  border: none;
+  background: transparent;
+  color: #344b38;
+  cursor: pointer;
+}
+
+.product-quantity-control strong {
+  width: 38px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.product-add-button {
+  width: 100%;
+  min-height: 58px;
+  border: 1px solid #314b36;
+  background: #314b36;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.product-add-button:hover {
+  background: #243a29;
+}
+
+.product-add-button.added {
+  background: #627b5e;
+  border-color: #627b5e;
+}
+
+.product-cart-link {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  color: #526b51;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.product-highlights {
+  display: grid;
+  gap: 19px;
+}
+
+.product-highlights > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #778174;
+  font-size: 13px;
+}
+
+.product-highlights svg {
+  color: #9b895e;
+}
+
+/* TASTING NOTES */
+
+.product-tasting {
+  background: #f0f0e8;
+  padding: 85px 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 50px;
+}
+
+.product-tasting h2,
+.product-related-heading h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 36px;
+  font-weight: 400;
+  margin-top: 15px;
+}
+
+.product-tasting h2 i {
+  color: #9b895e;
+}
+
+.product-tasting-notes {
+  display: grid;
+  gap: 20px;
+}
+
+.product-tasting-notes > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 14px;
+  color: #667366;
+}
+
+.product-tasting-notes svg {
+  color: #9b895e;
+}
+
+/* RELATED PRODUCTS */
+
+.product-related {
+  padding: 100px 8%;
+}
+
+.product-related-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 40px;
+  gap: 20px;
+}
+
+.product-related-heading > a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #526b51;
+  font-size: 13px;
+}
+
+.product-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.product-related-card {
+  text-decoration: none;
+  color: #314b36;
+}
+
+.product-related-card > div {
+  height: 300px;
+  overflow: hidden;
+  background: #e9e8df;
+  margin-bottom: 20px;
+}
+
+.product-related-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-related-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-related-card > span {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #a58a59;
+}
+
+.product-related-card h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 21px;
+  font-weight: 400;
+  margin: 10px 0;
+}
+
+.product-related-card strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.product-closing {
+  background: #304b36;
+  color: #fff;
+  text-align: center;
+  padding: 85px 20px;
+}
+
+.product-closing span {
+  color: #d2bd8c;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+.product-closing h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(30px, 4vw, 45px);
+  font-weight: 400;
+  margin-top: 20px;
+}
+
+.product-not-found {
+  min-height: 65vh;
+  padding: 100px 8%;
+  text-align: center;
+}
+
+.product-not-found > span {
+  color: #a58a59;
+  letter-spacing: 3px;
+  font-size: 11px;
+}
+
+.product-not-found h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 42px;
+  font-weight: 400;
+}
+
+.product-not-found a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 25px;
+  color: #314b36;
+  text-decoration: none;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .product-main {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .product-main-image {
+    height: 500px;
+  }
+
+  .product-information {
+    padding-top: 10px;
+  }
+
+  .product-tasting {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .product-breadcrumb {
+    padding: 22px 5%;
+    font-size: 11px;
+  }
+
+  .product-main {
+    padding: 20px 5% 65px;
+  }
+
+  .product-main-image {
+    height: 380px;
+  }
+
+  .product-information h1 {
+    font-size: 39px;
+  }
+
+  .product-tasting {
+    padding: 65px 7%;
+  }
+
+  .product-tasting h2,
+  .product-related-heading h2 {
+    font-size: 29px;
+  }
+
+  .product-related {
+    padding: 65px 5%;
+  }
+
+  .product-related-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .product-related-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 14px;
+  }
+
+  .product-related-card > div {
+    height: 190px;
+  }
+
+  .product-related-card h3 {
+    font-size: 17px;
+  }
+}
+
