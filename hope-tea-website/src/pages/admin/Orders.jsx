@@ -8,13 +8,15 @@ import {
   Clock,
   CheckCircle,
   Truck,
-  XCircle,
   ShoppingBag,
   ChevronDown,
   ArrowUpRight,
 } from "lucide-react";
 
-const ORDERS_KEY = "hopeTeaOrders";
+import {
+  getStoredOrders,
+  saveStoredOrders,
+} from "../../Data/adminStorage";
 
 const statusOptions = [
   "Pending",
@@ -27,15 +29,6 @@ const statusOptions = [
 
 const formatPrice = (price) =>
   `LKR ${Number(price || 0).toLocaleString("en-LK")}`;
-
-function readOrders() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(ORDERS_KEY) || "[]");
-    return Array.isArray(saved) ? saved : [];
-  } catch {
-    return [];
-  }
-}
 
 function getCustomerName(order) {
   const customer = order.customer || {};
@@ -51,13 +44,13 @@ function getStatusClass(status) {
 }
 
 function Orders() {
-  const [orders, setOrders] = useState(readOrders);
+  const [orders, setOrders] = useState(getStoredOrders);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   const refreshOrders = () => {
-    setOrders(readOrders());
+    setOrders(getStoredOrders());
   };
 
   const updateStatus = (orderNumber, newStatus) => {
@@ -67,7 +60,7 @@ function Orders() {
         : order
     );
 
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(updatedOrders));
+    saveStoredOrders(updatedOrders);
     setOrders(updatedOrders);
 
     if (selectedOrder?.orderNumber === orderNumber) {

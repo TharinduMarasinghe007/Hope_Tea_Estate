@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -9,11 +8,20 @@ import {
   ShoppingBag,
   MapPin,
 } from "lucide-react";
+import {
+  getStoredSettings,
+  getStoredPromotions,
+  saveStoredPromotions,
+  saveStoredOrders,
+  getStoredOrders,
+} from "../Data/adminStorage";
 
 const CART_KEY = "hopeTeaCart";
-const ORDERS_KEY = "hopeTeaOrders";
 
 function Checkout() {
+  const [settings] = useState(getStoredSettings);
+  const [promotions] = useState(getStoredPromotions);
+
   const [cart, setCart] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
@@ -37,27 +45,86 @@ function Checkout() {
   const [errors, setErrors] = useState({});
   const [order, setOrder] = useState(null);
 
-  const subtotal = cart.reduce(
-    (total, item) =>
-      total + Number(item.price) * Number(item.quantity),
-    0
-  );
+  // Promo code state
+  const [promoCodeInput, setPromoCodeInput] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [promoMessage, setPromoMessage] = useState({ text: "", isError: false });
+
+  const subtotal = useMemo(() => {
+    return cart.reduce(
+      (total, item) =>
+        total + Number(item.price) * Number(item.quantity),
+      0
+    );
+  }, [cart]);
+
+  // Delivery calculation from store settings
+  const freeThreshold = Number(settings.freeDeliveryThreshold || 5000);
+  const standardFee = Number(settings.deliveryFee || 350);
+  const isFreeDelivery = subtotal >= freeThreshold;
+  const deliveryFee = isFreeDelivery ? 0 : standardFee;
+
+  // Discount calculation
+  const discountAmount = useMemo(() => {
+    if (!appliedPromo) return 0;
+    if (appliedPromo.discountType === "percentage") {
+      return Math.round((subtotal * appliedPromo.discountValue) / 100);
+    }
+    return Math.min(subtotal, appliedPromo.discountValue);
+  }, [subtotal, appliedPromo]);
+
+  const finalTotal = Math.max(0, subtotal - discountAmount + deliveryFee);
 
   const formatPrice = (price) =>
     `LKR ${Number(price).toLocaleString("en-LK")}`;
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
     setForm((current) => ({
       ...current,
       [name]: value,
     }));
-
     setErrors((current) => ({
       ...current,
       [name]: "",
     }));
+  };
+
+  const handleApplyPromo = (e) => {
+    e.preventDefault();
+    setPromoMessage({ text: "", isError: false });
+
+    if (!promoCodeInput.trim()) {
+      setPromoMessage({ text: "Please enter a voucher code.", isError: true });
+      return;
+    }
+
+    const clean = promoCodeInput.trim().toUpperCase();
+    const match = promotions.find(
+      (p) => p.code.toUpperCase() === clean && p.active
+    );
+
+    if (!match) {
+      setPromoMessage({
+        text: "Invalid or expired promotion code.",
+        isError: true,
+      });
+      return;
+    }
+
+    if (subtotal < Number(match.minOrderAmount || 0)) {
+      setPromoMessage({
+        text: `This code requires a minimum order of ${formatPrice(match.minOrderAmount)}.`,
+        isError: true,
+      });
+      return;
+    }
+
+    setAppliedPromo(match);
+    setPromoMessage({
+      text: `Code applied: ${match.description}!`,
+      isError: false,
+    });
   };
 
   const validateForm = () => {
@@ -89,7 +156,6 @@ function Checkout() {
     event.preventDefault();
 
     if (!validateForm()) return;
-
     if (cart.length === 0) return;
 
     const orderNumber = `HOPE-${Date.now().toString().slice(-8)}`;
@@ -99,28 +165,31 @@ function Checkout() {
       customer: { ...form },
       items: [...cart],
       subtotal,
-      delivery: 0,
-      total: subtotal,
+      delivery: deliveryFee,
+      discount: discountAmount,
+      promoCode: appliedPromo ? appliedPromo.code : null,
+      total: finalTotal,
       status: "Pending",
       paymentMethod: "Cash on Delivery",
       createdAt: new Date().toISOString(),
     };
 
     try {
-      const existingOrders = JSON.parse(
-        localStorage.getItem(ORDERS_KEY) || "[]"
-      );
+      const existingOrders = getStoredOrders();
+      saveStoredOrders([...existingOrders, newOrder]);
 
-      const safeOrders = Array.isArray(existingOrders)
-        ? existingOrders
-        : [];
-
-      localStorage.setItem(
-        ORDERS_KEY,
-        JSON.stringify([...safeOrders, newOrder])
-      );
+      // If promo used, increment redemption count
+      if (appliedPromo) {
+        const updatedPromos = promotions.map((p) =>
+          p.id === appliedPromo.id
+            ? { ...p, usesCount: Number(p.usesCount || 0) + 1 }
+            : p
+        );
+        saveStoredPromotions(updatedPromos);
+      }
 
       localStorage.removeItem(CART_KEY);
+      window.dispatchEvent(new Event("storage"));
       setCart([]);
       setOrder(newOrder);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -138,40 +207,43 @@ function Checkout() {
           </div>
 
           <span>THANK YOU FOR CHOOSING HOPE</span>
-          <h1>Your order is <i>confirmed.</i></h1>
+          <h1>Your order is placed.</h1>
 
           <p>
-            Your order has been recorded successfully.
-            Thank you for bringing a little Hope into your day.
+            We have recorded your order <strong>{order.orderNumber}</strong>.
+            A tea care specialist will verify your delivery details before dispatching from our Hewaheta estate.
           </p>
 
-          <div className="checkout-order-number">
-            <span>YOUR ORDER REFERENCE</span>
-            <strong>{order.orderNumber}</strong>
-          </div>
-
-          <div className="checkout-success-summary">
+          <div className="checkout-success-box">
             <div>
-              <span>Order total</span>
+              <span>ORDER REFERENCE</span>
+              <strong>{order.orderNumber}</strong>
+            </div>
+
+            <div>
+              <span>PAYMENT METHOD</span>
+              <strong>{order.paymentMethod}</strong>
+            </div>
+
+            <div>
+              <span>ORDER TOTAL</span>
               <strong>{formatPrice(order.total)}</strong>
             </div>
+
             <div>
-              <span>Payment method</span>
-              <strong>Cash on Delivery</strong>
-            </div>
-            <div>
-              <span>Order status</span>
-              <strong>Pending</strong>
+              <span>DELIVERY TO</span>
+              <strong>{order.customer.city}, Sri Lanka</strong>
             </div>
           </div>
 
-          <Link to="/collection" className="checkout-primary-button">
-            CONTINUE EXPLORING <ArrowRight size={17} />
-          </Link>
-
-          <Link to="/" className="checkout-home-link">
-            Return to homepage
-          </Link>
+          <div style={{ marginTop: "30px", display: "flex", gap: "15px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link to="/collection" className="checkout-primary-button">
+              Explore more tea <ArrowRight size={17} />
+            </Link>
+            <Link to="/admin/orders" className="btn-secondary-pill">
+              View in Sales Dashboard
+            </Link>
+          </div>
         </section>
       </main>
     );
@@ -181,90 +253,170 @@ function Checkout() {
     return (
       <main className="checkout-page">
         <section className="checkout-empty">
-          <ShoppingBag size={42} />
-          <h1>Your bag is empty.</h1>
-          <p>Add some tea to your shopping bag before checking out.</p>
+          <div className="checkout-empty-icon">
+            <ShoppingBag size={38} />
+          </div>
+
+          <span>YOUR BAG IS EMPTY</span>
+          <h1>Ready for tea?</h1>
+
+          <p>
+            Please add some Ceylon tea to your shopping bag before proceeding to checkout.
+          </p>
+
           <Link to="/collection" className="checkout-primary-button">
-            EXPLORE OUR TEAS <ArrowRight size={17} />
+            Browse our teas <ArrowRight size={17} />
           </Link>
         </section>
       </main>
     );
   }
 
-  const fields = [
-    { name: "firstName", label: "First Name", placeholder: "Your first name" },
-    { name: "lastName", label: "Last Name", placeholder: "Your last name" },
-    { name: "email", label: "Email Address", placeholder: "you@example.com", type: "email" },
-    { name: "phone", label: "Phone Number", placeholder: "+94 7X XXX XXXX" },
-    { name: "address", label: "Delivery Address", placeholder: "House number, street name", full: true },
-    { name: "city", label: "City / Town", placeholder: "Your city" },
-    { name: "postalCode", label: "Postal Code (Optional)", placeholder: "Postal code" },
-  ];
-
   return (
     <main className="checkout-page">
-
       <section className="checkout-hero">
         <span>HOPE TEA ESTATE · HEWAHETA</span>
-        <h1>Almost <i>yours.</i></h1>
-        <p>Complete your details and let us prepare your order.</p>
+        <h1>Complete your <i>order.</i></h1>
+        <p>A little peace in every cup, delivered directly to your doorstep.</p>
       </section>
 
       <div className="checkout-breadcrumb">
         <Link to="/">Home</Link>
         <span>/</span>
-        <Link to="/cart">Shopping Cart</Link>
+        <Link to="/cart">Cart</Link>
         <span>/</span>
         <span>Checkout</span>
       </div>
 
-      <form className="checkout-layout" onSubmit={placeOrder} noValidate>
-
+      <form onSubmit={placeOrder} className="checkout-layout">
         <section className="checkout-form-section">
-          <div className="checkout-heading">
-            <MapPin size={21} />
-            <div>
-              <span>DELIVERY INFORMATION</span>
-              <h2>Where should we send it?</h2>
-            </div>
-          </div>
-
-          <div className="checkout-fields">
-            {fields.map((field) => (
-              <div
-                className={`checkout-field ${field.full ? "full-width" : ""}`}
-                key={field.name}
-              >
-                <label htmlFor={field.name}>{field.label}</label>
-                <input
-                  id={field.name}
-                  name={field.name}
-                  type={field.type || "text"}
-                  placeholder={field.placeholder}
-                  value={form[field.name]}
-                  onChange={handleChange}
-                  className={errors[field.name] ? "input-error" : ""}
-                />
-                {errors[field.name] && (
-                  <small>{errors[field.name]}</small>
-                )}
+          {/* Contact Details */}
+          <div className="checkout-group">
+            <div className="checkout-heading">
+              <MapPin size={21} />
+              <div>
+                <span>YOUR DETAILS</span>
+                <h2>Customer Information</h2>
               </div>
-            ))}
+            </div>
 
-            <div className="checkout-field full-width">
-              <label htmlFor="notes">Order Notes (Optional)</label>
-              <textarea
-                id="notes"
-                name="notes"
-                placeholder="Any additional delivery instructions?"
-                rows="3"
-                value={form.notes}
-                onChange={handleChange}
-              />
+            <div className="checkout-fields">
+              <div className="checkout-field">
+                <label>First Name *</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  placeholder="e.g. Amelia"
+                  className={errors.firstName ? "has-error" : ""}
+                />
+                {errors.firstName && <span className="field-error">{errors.firstName}</span>}
+              </div>
+
+              <div className="checkout-field">
+                <label>Last Name *</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  placeholder="e.g. Fernando"
+                  className={errors.lastName ? "has-error" : ""}
+                />
+                {errors.lastName && <span className="field-error">{errors.lastName}</span>}
+              </div>
+
+              <div className="checkout-field">
+                <label>Email Address *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="amelia@example.com"
+                  className={errors.email ? "has-error" : ""}
+                />
+                {errors.email && <span className="field-error">{errors.email}</span>}
+              </div>
+
+              <div className="checkout-field">
+                <label>Phone Number *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="+94 77 123 4567"
+                  className={errors.phone ? "has-error" : ""}
+                />
+                {errors.phone && <span className="field-error">{errors.phone}</span>}
+              </div>
             </div>
           </div>
 
+          {/* Delivery Address */}
+          <div className="checkout-group">
+            <div className="checkout-heading">
+              <MapPin size={21} />
+              <div>
+                <span>DELIVERY DESTINATION</span>
+                <h2>Where should we send your tea?</h2>
+              </div>
+            </div>
+
+            <div className="checkout-fields">
+              <div className="checkout-field full-width">
+                <label>Street Address *</label>
+                <input
+                  type="text"
+                  name="address"
+                  value={form.address}
+                  onChange={handleChange}
+                  placeholder="Apartment, suite, street number"
+                  className={errors.address ? "has-error" : ""}
+                />
+                {errors.address && <span className="field-error">{errors.address}</span>}
+              </div>
+
+              <div className="checkout-field">
+                <label>City *</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={form.city}
+                  onChange={handleChange}
+                  placeholder="e.g. Colombo, Kandy, Galle"
+                  className={errors.city ? "has-error" : ""}
+                />
+                {errors.city && <span className="field-error">{errors.city}</span>}
+              </div>
+
+              <div className="checkout-field">
+                <label>Postal Code</label>
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={form.postalCode}
+                  onChange={handleChange}
+                  placeholder="e.g. 00300"
+                />
+              </div>
+
+              <div className="checkout-field full-width">
+                <label>Order & Delivery Notes</label>
+                <textarea
+                  name="notes"
+                  placeholder="Any special handling or gate instructions?"
+                  rows="3"
+                  value={form.notes}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Method */}
           <div className="checkout-payment">
             <div className="checkout-heading">
               <ShieldCheck size={21} />
@@ -277,25 +429,25 @@ function Checkout() {
             <label className="checkout-payment-option">
               <input type="radio" checked readOnly />
               <span>
-                <strong>Cash on Delivery</strong>
-                <small>Pay when your order arrives.</small>
+                <strong>Cash on Delivery (COD)</strong>
+                <small>Pay cash securely when your package arrives.</small>
               </span>
             </label>
 
             <p className="checkout-payment-note">
-              Online payment integration can be added when
-              the backend and payment gateway are implemented.
+              Demonstration note: Card payments and digital gateways will be connected during Phase 3 Java Spring Boot integration.
             </p>
           </div>
         </section>
 
+        {/* Order Summary Sidebar */}
         <aside className="checkout-summary">
           <span>YOUR SELECTION</span>
           <h2>Order Summary</h2>
 
           <div className="checkout-summary-items">
             {cart.map((item) => (
-              <div className="checkout-summary-item" key={item.id}>
+              <div className="checkout-summary-item" key={item.cartItemId || item.id}>
                 <img src={item.image} alt={item.name} />
                 <div>
                   <strong>{item.name}</strong>
@@ -308,42 +460,106 @@ function Checkout() {
             ))}
           </div>
 
+          {/* Voucher Code Box */}
+          <div style={{ margin: "20px 0", padding: "14px", background: "#f2eee3", borderRadius: "10px", border: "1px solid #ded6c5" }}>
+            <span style={{ fontSize: "11px", fontWeight: "700", color: "#546858", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>
+              HAVE A VOUCHER CODE?
+            </span>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <input
+                type="text"
+                placeholder="e.g. WELCOME10"
+                value={promoCodeInput}
+                onChange={(e) => setPromoCodeInput(e.target.value.toUpperCase())}
+                style={{
+                  flex: 1,
+                  padding: "8px 12px",
+                  fontSize: "12px",
+                  fontWeight: "700",
+                  textTransform: "uppercase",
+                  borderRadius: "6px",
+                  border: "1px solid #d5cebf",
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleApplyPromo}
+                style={{
+                  background: "#1e3b26",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: "8px 14px",
+                  fontSize: "12px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+              >
+                Apply
+              </button>
+            </div>
+            {promoMessage.text && (
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "11px",
+                  marginTop: "6px",
+                  color: promoMessage.isError ? "#b85d19" : "#2d5438",
+                  fontWeight: "600",
+                }}
+              >
+                {promoMessage.text}
+              </span>
+            )}
+          </div>
+
+          {/* Pricing breakdown */}
           <div className="checkout-summary-line">
             <span>Subtotal</span>
             <strong>{formatPrice(subtotal)}</strong>
           </div>
 
+          {appliedPromo && (
+            <div className="checkout-summary-line" style={{ color: "#2d5438" }}>
+              <span>Voucher Discount ({appliedPromo.code})</span>
+              <strong>-{formatPrice(discountAmount)}</strong>
+            </div>
+          )}
+
           <div className="checkout-summary-line">
-            <span>Delivery</span>
-            <span>To be confirmed</span>
+            <span>Island-wide Delivery</span>
+            <strong>{isFreeDelivery ? "FREE" : formatPrice(deliveryFee)}</strong>
           </div>
 
           <div className="checkout-summary-total">
-            <span>Order total</span>
-            <strong>{formatPrice(subtotal)}</strong>
+            <span>Total to Pay</span>
+            <strong>{formatPrice(finalTotal)}</strong>
           </div>
 
-          <p className="checkout-delivery-note">
-            The displayed total excludes any delivery charge.
-            Final delivery arrangements must be confirmed.
-          </p>
+          {isFreeDelivery ? (
+            <p className="checkout-delivery-note" style={{ color: "#2d5438", fontWeight: "500" }}>
+              ✓ You unlocked Free Island-wide Delivery on orders over {formatPrice(freeThreshold)}.
+            </p>
+          ) : (
+            <p className="checkout-delivery-note">
+              Add {formatPrice(freeThreshold - subtotal)} more to qualify for Free Delivery.
+            </p>
+          )}
 
           <button type="submit" className="checkout-place-button">
-            PLACE MY ORDER <ArrowRight size={17} />
+            CONFIRM ORDER <ArrowRight size={17} />
           </button>
 
           <Link to="/cart" className="checkout-back-link">
             <ArrowLeft size={15} /> Return to shopping bag
           </Link>
         </aside>
-
       </form>
 
       <section className="checkout-closing">
         <span>HOPE TEA ESTATE · HEWAHETA</span>
         <h2>A little peace in every cup.</h2>
       </section>
-
     </main>
   );
 }

@@ -1,256 +1,262 @@
-
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
-  ArrowRight,
-  Check,
   Minus,
   Plus,
-  ShoppingBag,
   Leaf,
-  Clock,
-  Thermometer,
+  Sprout,
+  ShieldCheck,
+  Check,
 } from "lucide-react";
+import { products } from "../Data/Products";
 
-import { products } from "../data/products";
+const packSizes = ["50g", "100g", "250g"];
+const tabs = ["Tasting Notes", "Ingredients", "Brewing Guide", "Origin"];
 
 function ProductDetails() {
   const { id } = useParams();
+  const product = products.find((p) => p.id === Number(id)) || products[0];
 
-  const product = products.find(
-    (item) => item.id === Number(id)
-  );
-
+  const [packSize, setPackSize] = useState("100g");
   const [quantity, setQuantity] = useState(1);
+  const [activeTab, setActiveTab] = useState("Tasting Notes");
   const [added, setAdded] = useState(false);
 
-  if (!product) {
-    return (
-      <main className="product-not-found">
-        <span>HOPE TEA ESTATE</span>
-        <h1>Product not found.</h1>
-        <p>The tea you're looking for may no longer be available.</p>
-        <Link to="/collection">
-          <ArrowLeft size={17} /> Back to Collection
-        </Link>
-      </main>
-    );
-  }
+  // Price adjustment based on pack size
+  const multiplier = packSize === "50g" ? 0.6 : packSize === "250g" ? 2.2 : 1;
+  const currentPrice = Math.round(product.price * multiplier);
 
-  const relatedProducts = products
-    .filter(
-      (item) =>
-        item.category === product.category &&
-        item.id !== product.id
-    )
-    .slice(0, 3);
+  const handleAddToCart = () => {
+    try {
+      const currentCart = JSON.parse(
+        localStorage.getItem("hopeTeaCart") || "[]"
+      );
+      const safeCart = Array.isArray(currentCart) ? currentCart : [];
+      const cartItemId = `${product.id}-${packSize}`;
 
-  const addToCart = () => {
-    const currentCart = JSON.parse(
-      localStorage.getItem("hopeTeaCart") || "[]"
-    );
+      const existing = safeCart.find((item) => item.cartItemId === cartItemId);
 
-    const existingItem = currentCart.find(
-      (item) => item.id === product.id
-    );
+      if (existing) {
+        existing.quantity = Number(existing.quantity || 1) + quantity;
+      } else {
+        safeCart.push({
+          cartItemId,
+          id: product.id,
+          name: `${product.name} (${packSize})`,
+          price: currentPrice,
+          image: product.image,
+          weight: packSize,
+          quantity,
+        });
+      }
 
-    if (existingItem) {
-      existingItem.quantity += quantity;
-    } else {
-      currentCart.push({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        weight: product.weight,
-        quantity,
-      });
+      localStorage.setItem("hopeTeaCart", JSON.stringify(safeCart));
+      window.dispatchEvent(new Event("storage"));
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2500);
+    } catch (err) {
+      console.error("Failed adding to cart", err);
     }
-
-    localStorage.setItem(
-      "hopeTeaCart",
-      JSON.stringify(currentCart)
-    );
-
-    setAdded(true);
   };
 
   return (
-    <main className="product-details-page">
-
-      {/* BREADCRUMB */}
-      <div className="product-breadcrumb">
-        <Link to="/">Home</Link>
-        <span>/</span>
-        <Link to="/collection">Tea Collection</Link>
-        <span>/</span>
-        <span>{product.name}</span>
+    <main className="product-detail-page">
+      {/* Back Link */}
+      <div className="product-back-bar">
+        <Link to="/collection" className="product-back-link">
+          <ArrowLeft size={16} /> Back to Collection
+        </Link>
       </div>
 
-      {/* PRODUCT SECTION */}
-      <section className="product-main">
-
-        <div className="product-gallery">
-          <div className="product-main-image">
-            <img src={product.image} alt={product.name} />
-            <span>{product.tag}</span>
+      {/* 1. TOP SPLIT PRODUCT SECTION */}
+      <section className="product-hero-layout">
+        {/* Left: Product Image Showcase */}
+        <div className="product-visual-column">
+          <div className="product-large-image-card">
+            <img
+              src={product.image}
+              alt={product.name}
+              className="product-main-showcase-img"
+            />
+            {product.tag && (
+              <span className="product-corner-badge">{product.tag}</span>
+            )}
           </div>
-
-          <p className="product-image-caption">
-            HOPE TEA ESTATE · HEWAHETA
-          </p>
         </div>
 
-        <div className="product-information">
+        {/* Right: Product Purchase Info */}
+        <div className="product-info-column">
+          <h1 className="product-display-title">
+            {product.name} <br />
+            <span>{product.subType || product.category}</span>
+          </h1>
 
-          <span className="product-eyebrow">
-            {product.category}
-          </span>
+          <p className="product-display-desc">{product.description}</p>
 
-          <h1>{product.name}</h1>
-
-          <p className="product-description">
-            {product.longDescription}
-          </p>
-
-          <div className="product-price">
-            LKR {(product.price * quantity).toLocaleString("en-LK")}
+          <div className="product-display-price">
+            LKR {currentPrice.toLocaleString("en-LK")} —
           </div>
 
-          <p className="product-weight">
-            {product.weight} · Product of Sri Lanka
-          </p>
+          {/* Pack Size Selector */}
+          <div className="product-pack-size-row">
+            <label className="product-option-label">Pack Size:</label>
+            <div className="pack-size-pills">
+              {packSizes.map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  className={`pack-size-pill ${packSize === size ? "active" : ""}`}
+                  onClick={() => setPackSize(size)}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
 
-          <div className="product-divider" />
-
-          {/* QUANTITY */}
-          <div className="product-quantity-section">
-            <span>QUANTITY</span>
-
-            <div className="product-quantity-control">
+          {/* Quantity Stepper & Add to Cart */}
+          <div className="product-purchase-row">
+            <div className="product-qty-stepper">
               <button
                 type="button"
-                onClick={() =>
-                  setQuantity((current) => Math.max(1, current - 1))
-                }
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 aria-label="Decrease quantity"
               >
-                <Minus size={16} />
+                <Minus size={14} />
               </button>
-
-              <strong>{quantity}</strong>
-
+              <span className="qty-number">{quantity}</span>
               <button
                 type="button"
-                onClick={() =>
-                  setQuantity((current) => current + 1)
-                }
+                onClick={() => setQuantity((q) => q + 1)}
                 aria-label="Increase quantity"
               >
-                <Plus size={16} />
+                <Plus size={14} />
               </button>
             </div>
+
+            <button
+              type="button"
+              className={`product-add-to-cart-btn ${added ? "added" : ""}`}
+              onClick={handleAddToCart}
+            >
+              {added ? (
+                <>
+                  <Check size={18} /> Added to Cart
+                </>
+              ) : (
+                "Add to Cart"
+              )}
+            </button>
           </div>
 
-          {/* ADD TO CART */}
-          <button
-            type="button"
-            className={`product-add-button ${added ? "added" : ""}`}
-            onClick={addToCart}
-          >
-            {added ? <Check size={19} /> : <ShoppingBag size={19} />}
-            {added ? "ADDED TO CART" : "ADD TO CART"}
-          </button>
-
-          {added && (
-            <Link to="/cart" className="product-cart-link">
-              View your shopping cart <ArrowRight size={16} />
-            </Link>
-          )}
-
-          <div className="product-divider" />
-
-          {/* PRODUCT HIGHLIGHTS */}
-          <div className="product-highlights">
-            <div>
-              <Leaf size={19} />
-              <span>Tea selection</span>
+          {/* Trust Badges */}
+          <div className="product-trust-badges-row">
+            <div className="trust-badge-item">
+              <Leaf size={16} />
+              <span>Premium Quality</span>
             </div>
-
-            <div>
-              <Clock size={19} />
-              <span>{product.brewingTime}</span>
+            <div className="trust-badge-item">
+              <Sprout size={16} />
+              <span>Naturally Grown</span>
             </div>
-
-            <div>
-              <Thermometer size={19} />
-              <span>{product.waterTemperature}</span>
+            <div className="trust-badge-item">
+              <ShieldCheck size={16} />
+              <span>Ceylon Tea</span>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* TASTING NOTES */}
-      <section className="product-tasting">
-        <div>
-          <span>DISCOVER THE CHARACTER</span>
-          <h2>A closer look at your <i>tea.</i></h2>
-        </div>
-
-        <div className="product-tasting-notes">
-          {product.tastingNotes.map((note) => (
-            <div key={note}>
-              <Leaf size={18} />
-              <span>{note}</span>
-            </div>
+      {/* 2. TABS SECTION (Below) */}
+      <section className="product-tabs-section">
+        <div className="product-tabs-header">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              className={`product-tab-btn ${activeTab === tab ? "active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
           ))}
         </div>
-      </section>
 
-      {/* RELATED PRODUCTS */}
-      {relatedProducts.length > 0 && (
-        <section className="product-related">
-          <div className="product-related-heading">
-            <div>
-              <span>EXPLORE MORE</span>
-              <h2>You may also enjoy</h2>
-            </div>
+        <div className="product-tab-content-grid">
+          <div className="tab-text-side">
+            {activeTab === "Tasting Notes" && (
+              <div>
+                <p className="tab-main-paragraph">
+                  {product.longDescription ||
+                    "A rich, well-balanced tea with a smooth flavour and a refreshing aroma."}
+                </p>
+                <ul className="tab-bullet-list">
+                  {(product.tastingNotes || []).map((note) => (
+                    <li key={note}>
+                      <span className="bullet-dot" /> {note}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-            <Link to="/collection">
-              View all teas <ArrowRight size={17} />
-            </Link>
-          </div>
+            {activeTab === "Ingredients" && (
+              <div>
+                <p className="tab-main-paragraph">
+                  {product.ingredients ||
+                    "100% Pure Ceylon Single-Estate Black Tea Leaves. Free of artificial additives, preservatives, and synthetics."}
+                </p>
+                <p className="tab-sub-text">
+                  Grown on the mist-covered mountain slopes of Hewaheta, Sri Lanka, and hand-processed in accordance with classic Ceylon tea standards.
+                </p>
+              </div>
+            )}
 
-          <div className="product-related-grid">
-            {relatedProducts.map((item) => (
-              <Link
-                to={`/product/${item.id}`}
-                className="product-related-card"
-                key={item.id}
-              >
-                <div>
-                  <img src={item.image} alt={item.name} />
+            {activeTab === "Brewing Guide" && (
+              <div>
+                <p className="tab-main-paragraph">
+                  To experience the full character of this harvest, follow our estate brewing guidelines:
+                </p>
+                <div className="brewing-guide-specs">
+                  <div className="brew-spec">
+                    <strong>Water Temperature:</strong>
+                    <span>{product.waterTemperature || "95–100°C"}</span>
+                  </div>
+                  <div className="brew-spec">
+                    <strong>Steeping Time:</strong>
+                    <span>{product.brewingTime || "3–5 minutes"}</span>
+                  </div>
+                  <div className="brew-spec">
+                    <strong>Measurement:</strong>
+                    <span>2.5g (approx. 1 heaping teaspoon) per 220ml cup</span>
+                  </div>
                 </div>
+              </div>
+            )}
 
-                <span>{item.category}</span>
-                <h3>{item.name}</h3>
-                <strong>
-                  LKR {item.price.toLocaleString("en-LK")}
-                </strong>
-              </Link>
-            ))}
+            {activeTab === "Origin" && (
+              <div>
+                <p className="tab-main-paragraph">
+                  <strong>Estate Region:</strong> {product.origin || "Hewaheta Upper Division, Central Province, Sri Lanka."}
+                </p>
+                <p className="tab-sub-text">
+                  Situated over 1,200m above sea level in the picturesque highlands near Kandy. Our volcanic mountain soil and high-altitude diurnal temperature shifts give Hope teas their distinct complexity and golden rim.
+                </p>
+              </div>
+            )}
           </div>
-        </section>
-      )}
 
-      {/* CLOSING */}
-      <section className="product-closing">
-        <span>HOPE TEA ESTATE · HEWAHETA</span>
-        <h2>A little peace in every cup.</h2>
+          <div className="tab-visual-side">
+            <div className="tab-cup-image-wrap">
+              <img
+                src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=800"
+                alt="Brewed cup of golden Ceylon tea on wooden saucer"
+              />
+            </div>
+          </div>
+        </div>
       </section>
-
     </main>
   );
 }

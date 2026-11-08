@@ -1,204 +1,99 @@
-
 import { Link } from "react-router-dom";
-import { ArrowDown, ArrowRight, Leaf, Mountain, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 function About() {
   return (
-    <main className="estate-about">
-
-      {/* HERO */}
-      <section className="estate-about-hero">
-        <div className="estate-about-hero-image" />
-
-        <div className="estate-about-hero-content">
-          <span>THE STORY OF HOPE TEA ESTATE</span>
-
-          <h1>
-            Where nature
-            <br />
-            becomes <i>tradition.</i>
-          </h1>
-
-          <p>
-            A story shaped by the landscapes of Hewaheta
-            and the timeless character of Ceylon tea.
-          </p>
-
-          <a href="#estate-story" className="estate-about-scroll">
-            EXPLORE OUR STORY <ArrowDown size={16} />
-          </a>
+    <main className="estate-about-page">
+      {/* 1. HERO BANNER */}
+      <section className="estate-hero-section">
+        <div className="estate-hero-image-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=85&w=1600"
+            alt="Hope Tea Estate Highlands in Hewaheta"
+            className="estate-hero-img"
+          />
+          <div className="estate-hero-curve-mask" />
         </div>
 
-        <div className="estate-about-hero-caption">
-          HEWAHETA · SRI LANKA
+        <div className="estate-hero-content">
+          <h1>Our place in the highlands</h1>
+          <p>Where nature nurtures every leaf.</p>
         </div>
       </section>
 
+      {/* 2. THREE STORY SECTIONS */}
+      <section className="estate-story-container">
+        {/* Story 1: The Heart of Hewaheta */}
+        <div className="estate-story-block">
+          <div className="story-text-column">
+            <h2>The Heart of Hewaheta</h2>
+            <p>
+              Nestled in the serene highlands, Hope Tea Estate is part of Sri Lanka's proud tea heritage, surrounded by lush greenery and cool mountain air.
+            </p>
+            <p className="story-sub-detail">
+              At an elevation of over 1,200 meters, our tea bushes receive the optimal balance of gentle monsoonal rains and golden sunshine, giving our leaves their celebrated golden hue and crisp aroma.
+            </p>
+          </div>
 
-      {/* INTRODUCTION */}
-      <section id="estate-story" className="estate-about-story">
-
-        <div className="estate-about-story-label">
-          <span>01 / OUR STORY</span>
+          <div className="story-image-column">
+            <div className="story-rounded-image">
+              <img
+                src="https://images.unsplash.com/photo-1563911892437-1feda0179e1b?q=85&w=900"
+                alt="Green mountain ridges and misty tea terraces of Hewaheta"
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="estate-about-story-grid">
-
-          <div className="estate-about-story-image">
-            <img
-              src="https://images.unsplash.com/photo-1563911892437-1feda0179e1b?q=85&w=1200"
-              alt="Green tea plantation landscape"
-            />
-
-            <div className="estate-about-image-caption">
-              THE GREEN LANDSCAPES OF HEWAHETA
+        {/* Story 2: People, Passion and Purpose (Reversed) */}
+        <div className="estate-story-block reverse">
+          <div className="story-image-column">
+            <div className="story-rounded-image">
+              <img
+                src="https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?q=85&w=900"
+                alt="Tea plucker hand-picking two tender tea leaves and a bud"
+              />
             </div>
           </div>
 
-          <div className="estate-about-story-text">
-            <span className="estate-about-kicker">
-              MORE THAN JUST TEA
-            </span>
-
-            <h2>
-              A place with
-              <br />
-              a story to <i>share.</i>
-            </h2>
-
+          <div className="story-text-column">
+            <h2>People, Passion and Purpose</h2>
             <p>
-              Set amidst the green surroundings of Hewaheta,
-              Hope Tea Estate is connected to the landscape,
-              people and processes that shape the experience
-              of Ceylon tea.
+              Our team's dedication ensures every leaf is handled with care, from the garden to the factory.
             </p>
+            <p className="story-sub-detail">
+              We empower generational tea-growing families whose wisdom and deft hands select only the tender topmost shoots—the celebrated “two leaves and a bud”—ensuring unmatched purity and character.
+            </p>
+          </div>
+        </div>
 
+        {/* Story 3: A Legacy of Ceylon Tea */}
+        <div className="estate-story-block">
+          <div className="story-text-column">
+            <h2>A Legacy of Ceylon Tea</h2>
             <p>
-              Every stage of tea production is part of a
-              larger journey. From the tea gardens to the
-              finished product, it is a journey worth
-              discovering.
+              With a deep-rooted connection to Sri Lanka's tea tradition, Hope Tea Estate continues to uphold the values of quality and sustainability.
             </p>
-
-            <div className="estate-about-signature">
-              <span>HOPE TEA ESTATE</span>
-              <small>HEWAHETA, SRI LANKA</small>
+            <p className="story-sub-detail">
+              From organic soil enrichment to eco-friendly drying and solar-assisted factory processes, we cultivate tea with reverence for the future of our island and communities.
+            </p>
+            <div style={{ marginTop: "24px" }}>
+              <Link to="/journey" className="btn-primary-pill">
+                Explore Tea Journey <ArrowRight size={16} />
+              </Link>
             </div>
           </div>
 
-        </div>
-      </section>
-
-
-      {/* LANDSCAPE */}
-      <section className="estate-about-landscape">
-
-        <div className="estate-about-landscape-image" />
-
-        <div className="estate-about-landscape-content">
-          <span>02 / OUR SURROUNDINGS</span>
-
-          <h2>
-            Inspired by
-            <br />
-            the <i>highlands.</i>
-          </h2>
-
-          <p>
-            The character of tea begins long before it reaches
-            the cup. The landscape, climate and environment
-            are all part of the story.
-          </p>
-
-          <div className="estate-about-location">
-            <Mountain size={19} />
-            <span>HEWAHETA · CENTRAL HIGHLANDS · SRI LANKA</span>
+          <div className="story-image-column">
+            <div className="story-rounded-image">
+              <img
+                src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=900"
+                alt="Historic Hope Tea Estate factory and heritage architecture"
+              />
+            </div>
           </div>
         </div>
-
       </section>
-
-
-      {/* VALUES */}
-      <section className="estate-about-values">
-
-        <div className="estate-about-values-heading">
-          <div>
-            <span>03 / WHAT MATTERS</span>
-            <h2>
-              The things that
-              <br />
-              <i>define us.</i>
-            </h2>
-          </div>
-
-          <p>
-            A closer look at the elements that make the
-            Hope Tea Estate story meaningful.
-          </p>
-        </div>
-
-        <div className="estate-about-value-grid">
-
-          <article className="estate-about-value-card">
-            <div className="estate-about-value-number">01</div>
-            <Leaf size={29} strokeWidth={1.3} />
-            <h3>Our Environment</h3>
-            <p>
-              Appreciating the natural surroundings that
-              form an essential part of tea cultivation.
-            </p>
-          </article>
-
-          <article className="estate-about-value-card">
-            <div className="estate-about-value-number">02</div>
-            <Mountain size={29} strokeWidth={1.3} />
-            <h3>Our Craft</h3>
-            <p>
-              Understanding the care and processes involved
-              in transforming fresh tea leaves into tea.
-            </p>
-          </article>
-
-          <article className="estate-about-value-card">
-            <div className="estate-about-value-number">03</div>
-            <Users size={29} strokeWidth={1.3} />
-            <h3>Our People</h3>
-            <p>
-              Recognising the people whose knowledge,
-              dedication and work contribute to the journey.
-            </p>
-          </article>
-
-        </div>
-      </section>
-
-
-      {/* CLOSING */}
-      <section className="estate-about-closing">
-        <div className="estate-about-closing-image" />
-
-        <div className="estate-about-closing-content">
-          <span>DISCOVER THE WORLD OF HOPE</span>
-
-          <h2>
-            A little peace
-            <br />
-            in <i>every cup.</i>
-          </h2>
-
-          <p>
-            Explore the tea collection and discover
-            what Hope Tea Estate has to offer.
-          </p>
-
-          <Link to="/collection">
-            EXPLORE OUR TEA COLLECTION
-            <ArrowRight size={17} />
-          </Link>
-        </div>
-      </section>
-
     </main>
   );
 }

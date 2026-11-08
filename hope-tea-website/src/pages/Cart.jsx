@@ -32,6 +32,7 @@ function Cart() {
   const saveCart = (updatedCart) => {
     setCart(updatedCart);
     localStorage.setItem(CART_KEY, JSON.stringify(updatedCart));
+    window.dispatchEvent(new Event("storage"));
   };
 
   const updateQuantity = (id, change) => {

@@ -1,201 +1,145 @@
-
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowDown,
-  ArrowRight,
-  Leaf,
-  Sun,
-  Package,
-  Coffee,
-} from "lucide-react";
+import { ArrowRight, QrCode, CheckCircle2 } from "lucide-react";
 
-const journeyStages = [
+const processSteps = [
   {
-    number: "01",
-    title: "The Tea Gardens",
-    subtitle: "WHERE EVERY CUP BEGINS",
+    id: 1,
+    title: "Tea Gardens",
+    subtitle: "Nurtured in nature",
     description:
-      "Every tea journey begins with the land. The natural landscape, fresh air and carefully nurtured tea bushes form the foundation of a memorable cup.",
+      "Every tea journey begins in the volcanic highland soil of Hewaheta. The fresh mountain air and morning mist nurture the tea bushes to peak vitality.",
     image:
-      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=85&w=1200",
-    icon: Leaf,
+      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=85&w=600",
   },
   {
-    number: "02",
-    title: "The Art of Plucking",
-    subtitle: "A CAREFUL SELECTION",
+    id: 2,
+    title: "Leaf Plucking",
+    subtitle: "Two leaves & a bud",
     description:
-      "Tea leaves are selected with care. The choice of leaves plays an important role in the character, aroma and quality of the final tea.",
+      "Skilled estate pluckers hand-select only the tender topmost shoots at dawn, ensuring unmatched freshness, aroma, and delicate polyphenol balance.",
     image:
-      "https://images.unsplash.com/photo-1563911892437-1feda0179e1b?q=85&w=1200",
-    icon: Sun,
+      "https://images.unsplash.com/photo-1563911892437-1feda0179e1b?q=85&w=600",
   },
   {
-    number: "03",
-    title: "The Making of Tea",
-    subtitle: "CRAFT AND TRADITION",
+    id: 3,
+    title: "Processing",
+    subtitle: "Withering & rolling",
     description:
-      "Tea processing transforms freshly harvested leaves into the tea we enjoy. Different processing methods help create the distinctive character of different tea varieties.",
+      "Fresh leaves are carefully withered to reduce moisture, then gently rolled using artisanal methods that release the essential oils and initiate oxidation.",
     image:
-      "https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=1200",
-    icon: Coffee,
+      "https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=600",
   },
   {
-    number: "04",
-    title: "Preparing for You",
-    subtitle: "READY TO BE ENJOYED",
+    id: 4,
+    title: "Grading",
+    subtitle: "Sifting by leaf size",
     description:
-      "Once processed and prepared, tea is packaged to help preserve its character until it reaches the people who enjoy it.",
+      "After precise kiln firing, the tea is sorted by leaf particle size—from unbroken Whole Leaf to Broken Orange Pekoe (BOP) and fine fannings.",
     image:
-      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=85&w=1200",
-    icon: Package,
+      "https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?q=85&w=600",
+  },
+  {
+    id: 5,
+    title: "Packing",
+    subtitle: "Sealed for freshness",
+    description:
+      "Sealed in moisture-proof foil pouches and tin canisters at the estate to lock in the highland terroir until you steep your first cup.",
+    image:
+      "https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=85&w=600",
   },
 ];
 
 function TeaJourney() {
+  const [selectedStep, setSelectedStep] = useState(processSteps[0]);
+
   return (
-    <main className="tea-journey">
-
-      {/* HERO */}
-      <section className="journey-hero">
-        <div className="journey-hero-image" />
-
-        <div className="journey-hero-overlay" />
-
-        <div className="journey-hero-content">
-          <span>THE STORY BEHIND EVERY CUP</span>
-
-          <h1>
-            From garden
-            <br />
-            <i>to your cup.</i>
-          </h1>
-
-          <p>
-            Every cup has a story. Discover the journey,
-            care and craft behind the world of Ceylon tea.
-          </p>
-
-          <a href="#journey-story" className="journey-hero-button">
-            DISCOVER THE JOURNEY
-            <ArrowDown size={17} />
-          </a>
+    <main className="journey-page-wrap">
+      {/* 1. HERO BANNER */}
+      <section className="journey-hero-banner">
+        <div className="journey-hero-bg">
+          <img
+            src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=1600"
+            alt="Sun-kissed Ceylon tea plantation in Hewaheta"
+            className="journey-hero-img"
+          />
+          <div className="journey-hero-overlay" />
         </div>
 
-        <div className="journey-hero-bottom">
-          <span>HOPE TEA ESTATE · HEWAHETA</span>
-          <span>A LITTLE PEACE IN EVERY CUP</span>
+        <div className="journey-hero-text">
+          <h1>Every leaf has a journey</h1>
+          <p>From our gardens to your cup, with care at every step.</p>
         </div>
       </section>
 
-      {/* INTRODUCTION */}
-      <section id="journey-story" className="journey-intro">
-        <span>MORE THAN JUST TEA</span>
-
-        <h2>
-          A journey shaped by
-          <br />
-          <i>nature and care.</i>
-        </h2>
-
-        <p>
-          Behind every cup of tea is a journey that begins
-          in the garden and continues through a series of
-          carefully managed processes. Explore the journey
-          that brings tea from the landscape to your home.
-        </p>
-      </section>
-
-      {/* JOURNEY STAGES */}
-      <section className="journey-stages">
-
-        <div className="journey-stages-heading">
-          <span>THE PROCESS</span>
-          <h2>Four moments. <i>One journey.</i></h2>
-        </div>
-
-        {journeyStages.map((stage, index) => {
-          const Icon = stage.icon;
-          const reverse = index % 2 !== 0;
-
-          return (
-            <article
-              className={`journey-stage ${reverse ? "reverse" : ""}`}
-              key={stage.number}
-            >
-              <div className="journey-stage-image">
-                <img src={stage.image} alt={stage.title} />
-
-                <span className="journey-stage-number">
-                  {stage.number}
-                </span>
-              </div>
-
-              <div className="journey-stage-content">
-                <div className="journey-stage-icon">
-                  <Icon size={23} />
+      {/* 2. 5-STEP CIRCULAR PROCESS FLOW */}
+      <section className="journey-steps-section">
+        <div className="steps-flow-container">
+          {processSteps.map((step, index) => (
+            <div key={step.id} className="step-item-wrapper">
+              <button
+                type="button"
+                className={`step-circle-btn ${selectedStep.id === step.id ? "active" : ""}`}
+                onClick={() => setSelectedStep(step)}
+                aria-label={`Select step ${step.id}: ${step.title}`}
+              >
+                <div className="step-circle-img-wrap">
+                  <img src={step.image} alt={step.title} />
                 </div>
+              </button>
 
-                <span>{stage.subtitle}</span>
+              <span className="step-circle-label">{step.title}</span>
 
-                <h3>{stage.title}</h3>
+              {index < processSteps.length - 1 && (
+                <div className="step-arrow-connector">→</div>
+              )}
+            </div>
+          ))}
+        </div>
 
-                <p>{stage.description}</p>
-
-                <div className="journey-stage-line" />
-              </div>
-            </article>
-          );
-        })}
-
-      </section>
-
-      {/* QUOTE / BREAK */}
-      <section className="journey-quote">
-        <div className="journey-quote-image" />
-
-        <div className="journey-quote-content">
-          <span>THE BEAUTY OF CEYLON TEA</span>
-
-          <h2>
-            Nature gives it
-            <br />
-            its <i>character.</i>
-          </h2>
-
-          <p>
-            From the first leaf to the final brew,
-            every stage contributes to the experience
-            of a good cup of tea.
-          </p>
+        {/* Selected Step Detail Card */}
+        <div className="selected-step-detail-card">
+          <div className="step-detail-badge">
+            <CheckCircle2 size={16} />
+            <span>Step 0{selectedStep.id} · {selectedStep.subtitle}</span>
+          </div>
+          <h2>{selectedStep.title}</h2>
+          <p>{selectedStep.description}</p>
         </div>
       </section>
 
-      {/* GARDEN TO CUP */}
-      <section className="journey-ending">
-        <div className="journey-ending-content">
-          <Leaf size={30} />
+      {/* 3. "TRACE THE JOURNEY" QR CARD & CUP FEATURE */}
+      <section className="journey-trace-feature-section">
+        <div className="trace-feature-grid">
+          {/* Left: QR Card */}
+          <div className="trace-qr-card">
+            <div className="trace-qr-graphic">
+              <QrCode size={56} color="#1e3b26" />
+            </div>
 
-          <span>THE HOPE TEA EXPERIENCE</span>
+            <div className="trace-qr-info">
+              <h3>Trace the Journey</h3>
+              <p>
+                A proposed future feature to view the journey of your tea batch—from plucking date to packing.
+              </p>
 
-          <h2>
-            And finally,
-            <br />
-            <i>a moment for you.</i>
-          </h2>
+              <Link to="/about" className="btn-primary-pill trace-btn">
+                Learn More <ArrowRight size={15} />
+              </Link>
+            </div>
+          </div>
 
-          <p>
-            Take a breath, prepare your favourite tea
-            and enjoy a little moment of peace.
-          </p>
-
-          <Link to="/collection">
-            EXPLORE OUR TEA COLLECTION
-            <ArrowRight size={17} />
-          </Link>
+          {/* Right: Rich Teacup Visual */}
+          <div className="trace-visual-card">
+            <div className="trace-cup-img-wrap">
+              <img
+                src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=900"
+                alt="Fresh cup of amber tea with tea leaves"
+              />
+            </div>
+          </div>
         </div>
       </section>
-
     </main>
   );
 }

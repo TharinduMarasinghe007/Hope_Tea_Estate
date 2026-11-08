@@ -1,0 +1,1792 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+  --tea-forest: #1e3b26;
+  --tea-forest-hover: #14281a;
+  --tea-forest-light: #2b5034;
+  --tea-sage: #5b7360;
+  --tea-cream-bg: #f8f6f0;
+  --tea-card-bg: #f2eee3;
+  --tea-card-white: #fcfbfa;
+  --tea-border: #e6e0d3;
+  --tea-text-dark: #1b281f;
+  --tea-text-muted: #5e6d61;
+  --tea-gold: #c49646;
+}
+
+body {
+  background-color: var(--tea-cream-bg);
+  color: var(--tea-text-dark);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   GLOBAL PILL BUTTONS & ATOMS
+========================================= */
+
+.btn-primary-pill {
+  background: var(--tea-forest);
+  color: #ffffff !important;
+  border-radius: 25px;
+  padding: 11px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  line-height: 1;
+}
+
+.btn-primary-pill:hover {
+  background: var(--tea-forest-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(30, 59, 38, 0.22);
+}
+
+.btn-secondary-pill {
+  background: transparent;
+  color: var(--tea-forest) !important;
+  border: 1.5px solid var(--tea-forest);
+  border-radius: 25px;
+  padding: 10px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  line-height: 1;
+}
+
+.btn-secondary-pill:hover {
+  background: var(--tea-forest);
+  color: #ffffff !important;
+}
+
+/* =========================================
+   HEADER / NAVBAR
+========================================= */
+
+.site-navbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: #fcfbfa;
+  border-bottom: 1px solid #ebe5da;
+  z-index: 1000;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+.navbar-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 35px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-text-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-primary-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.8px;
+  line-height: 1.15;
+}
+
+.brand-motto-text {
+  font-style: italic;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.navbar-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-item-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2e3d31;
+  text-decoration: none;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-item-link:hover {
+  color: var(--tea-forest);
+}
+
+.nav-item-link.active {
+  color: var(--tea-forest);
+  font-weight: 700;
+}
+
+.nav-item-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--tea-forest);
+  border-radius: 2px;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.navbar-cart-btn {
+  position: relative;
+  color: var(--tea-forest);
+  display: flex;
+  align-items: center;
+  padding: 6px;
+}
+
+.navbar-cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: var(--tea-gold);
+  color: #ffffff;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-shop-tea-btn {
+  background: var(--tea-forest);
+  color: #ffffff !important;
+  padding: 9px 22px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.navbar-shop-tea-btn:hover {
+  background: var(--tea-forest-hover);
+  transform: translateY(-1px);
+}
+
+.navbar-mobile-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--tea-forest);
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.site-footer {
+  background: #183420;
+  color: #ffffff;
+  padding: 50px 35px 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.footer-links-row {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+
+.footer-nav-link {
+  color: #cad9cd;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-nav-link:hover {
+  color: #ffffff;
+}
+
+.footer-social-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-social-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.footer-social-icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+}
+
+.footer-bottom-line {
+  max-width: 1360px;
+  margin: 36px auto 0;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #8da292;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-legal-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.footer-legal-links a {
+  color: #8da292;
+  text-decoration: none;
+}
+
+.footer-legal-links a:hover {
+  color: #ffffff;
+}
+
+/* =========================================
+   PANEL 1: HOME PAGE
+========================================= */
+
+.home-page-container {
+  background: var(--tea-cream-bg);
+  overflow: hidden;
+}
+
+.home-hero-section {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 50px 35px 40px;
+}
+
+.home-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.home-hero-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(38px, 4.4vw, 56px);
+  font-weight: 700;
+  color: var(--tea-forest);
+  line-height: 1.14;
+  margin: 0 0 16px;
+}
+
+.home-hero-subtitle {
+  font-size: 16px;
+  color: var(--tea-sage);
+  margin: 0 0 28px;
+}
+
+.home-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.home-hero-visual {
+  position: relative;
+}
+
+.hero-scenic-image-wrap {
+  position: relative;
+  border-radius: 20px;
+  overflow: visible;
+}
+
+.hero-scenic-img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 10px 32px rgba(26, 45, 30, 0.09);
+}
+
+.hero-teacup-float {
+  position: absolute;
+  bottom: -28px;
+  right: -20px;
+  width: 185px;
+  height: 185px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #ffffff;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+  background: #ffffff;
+}
+
+.hero-teacup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 3 Value Cards */
+.home-value-strip {
+  background: #f7f5ed;
+  padding: 70px 35px 50px;
+  border-top: 1px solid #ebe5d8;
+  border-bottom: 1px solid #ebe5d8;
+}
+
+.value-cards-grid {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.value-card {
+  background: #f0ede3;
+  border: 1px solid #e3ddd0;
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.value-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(30, 59, 38, 0.06);
+}
+
+.value-card-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: #e2dcd0;
+  color: var(--tea-forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.value-card h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 19px;
+  color: var(--tea-forest);
+  margin: 0 0 8px;
+}
+
+.value-card p {
+  font-size: 13px;
+  color: #607163;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Collection Preview */
+.home-collection-preview {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 75px 35px 80px;
+}
+
+.section-title-wrap {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.section-title-wrap h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 34px;
+  color: var(--tea-forest);
+  margin: 0 0 8px;
+}
+
+.section-title-wrap p {
+  font-size: 14px;
+  color: #6a7c6d;
+  margin: 0;
+}
+
+.featured-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  margin-bottom: 42px;
+}
+
+.featured-tea-card {
+  background: var(--tea-card-white);
+  border: 1px solid var(--tea-border);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.featured-tea-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(30, 59, 38, 0.08);
+  border-color: #c4d6c7;
+}
+
+.featured-tea-img-wrap {
+  height: 210px;
+  background: #f3efe5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.featured-tea-img-wrap img {
+  max-height: 170px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.featured-tea-card:hover img {
+  transform: scale(1.04);
+}
+
+.featured-tea-info {
+  padding: 18px 20px 20px;
+  text-align: center;
+}
+
+.featured-tea-info h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px;
+  color: var(--tea-forest);
+  margin: 0 0 4px;
+}
+
+.featured-tea-cat {
+  display: block;
+  font-size: 11px;
+  color: #829285;
+  margin-bottom: 8px;
+}
+
+.featured-tea-price {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tea-forest);
+}
+
+.collection-browse-btn-row {
+  text-align: center;
+}
+
+/* Quote Banner */
+.home-bottom-quote-banner {
+  position: relative;
+  min-height: 270px;
+  background: url('https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=1600') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.quote-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(22, 45, 28, 0.65);
+}
+
+.quote-banner-content {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  padding: 40px 20px;
+}
+
+.quote-banner-content h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 400;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.quote-banner-content h2 i {
+  font-style: italic;
+  color: #e5f2e7;
+}
+
+/* =========================================
+   PANEL 2: OUR ESTATE
+========================================= */
+
+.estate-about-page {
+  background: var(--tea-cream-bg);
+}
+
+.estate-hero-section {
+  position: relative;
+  margin-bottom: 60px;
+}
+
+.estate-hero-image-wrap {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+}
+
+.estate-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.estate-hero-curve-mask {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(22, 45, 28, 0.45) 0%, rgba(248, 246, 240, 1) 100%);
+}
+
+.estate-hero-content {
+  position: absolute;
+  bottom: 35px;
+  left: 0;
+  right: 0;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 35px;
+  z-index: 2;
+}
+
+.estate-hero-content h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(34px, 4vw, 48px);
+  color: var(--tea-forest);
+  margin: 0 0 8px;
+}
+
+.estate-hero-content p {
+  font-size: 16px;
+  color: #4c5d4f;
+  margin: 0;
+}
+
+.estate-story-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 35px 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 75px;
+}
+
+.estate-story-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 55px;
+  align-items: center;
+}
+
+.story-text-column h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 30px;
+  color: var(--tea-forest);
+  margin: 0 0 16px;
+}
+
+.story-text-column p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #4a5c4e;
+  margin: 0 0 14px;
+}
+
+.story-sub-detail {
+  font-size: 13px;
+  color: #6b7a6d;
+  line-height: 1.6;
+}
+
+.story-rounded-image {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  height: 330px;
+}
+
+.story-rounded-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================================
+   PANEL 3: TEA COLLECTION
+========================================= */
+
+.collection-page-wrap {
+  background: var(--tea-cream-bg);
+  padding-bottom: 90px;
+}
+
+.collection-hero-banner {
+  position: relative;
+  height: 290px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.collection-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.collection-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.collection-hero-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(24, 46, 30, 0.82) 0%, rgba(24, 46, 30, 0.45) 60%, rgba(24, 46, 30, 0.1) 100%);
+}
+
+.collection-hero-text {
+  position: relative;
+  z-index: 2;
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 35px;
+  color: #ffffff;
+}
+
+.collection-hero-text h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 3.8vw, 44px);
+  margin: 0 0 8px;
+}
+
+.collection-hero-text p {
+  font-size: 15px;
+  color: #d6e2d8;
+  margin: 0;
+}
+
+.collection-controls-bar {
+  max-width: 1360px;
+  margin: 35px auto 30px;
+  padding: 0 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.collection-tabs-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.collection-tab-pill {
+  background: #ede9dd;
+  color: #3b4e3e;
+  border: none;
+  border-radius: 22px;
+  padding: 8px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.collection-tab-pill:hover {
+  background: #e2dccf;
+}
+
+.collection-tab-pill.active {
+  background: var(--tea-forest);
+  color: #ffffff;
+}
+
+.collection-sort-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #5f7062;
+}
+
+.sort-select-container {
+  position: relative;
+  display: inline-block;
+}
+
+.sort-select-container select {
+  appearance: none;
+  background: #ffffff;
+  border: 1px solid #dcd5c7;
+  border-radius: 20px;
+  padding: 7px 32px 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tea-forest);
+  cursor: pointer;
+  outline: none;
+}
+
+.sort-chevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #667568;
+}
+
+.collection-grid-section {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 35px;
+}
+
+.collection-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.tea-product-card {
+  background: var(--tea-card-white);
+  border: 1px solid var(--tea-border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+}
+
+.tea-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(30, 59, 38, 0.08);
+  border-color: #c5d6c8;
+}
+
+.tea-card-image-box {
+  height: 210px;
+  background: #f3efe5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.tea-card-image-box img {
+  max-height: 170px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.tea-product-card:hover img {
+  transform: scale(1.05);
+}
+
+.tea-card-details {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tea-card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px;
+  color: var(--tea-forest);
+  margin: 0 0 4px;
+  text-decoration: none;
+}
+
+.tea-card-type {
+  font-size: 11px;
+  color: #829285;
+  margin-bottom: 10px;
+}
+
+.tea-card-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tea-forest);
+  margin-bottom: 15px;
+}
+
+.tea-card-btn-wrap {
+  margin-top: auto;
+}
+
+.tea-card-view-btn {
+  width: 100%;
+  background: var(--tea-forest);
+  color: #ffffff !important;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.tea-card-view-btn:hover {
+  background: var(--tea-forest-hover);
+}
+
+/* =========================================
+   PANEL 4: PRODUCT DETAIL
+========================================= */
+
+.product-detail-page {
+  background: var(--tea-cream-bg);
+  padding: 30px 35px 80px;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.product-back-bar {
+  margin-bottom: 25px;
+}
+
+.product-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #536456;
+  font-size: 13px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.product-back-link:hover {
+  color: var(--tea-forest);
+}
+
+.product-hero-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 50px;
+  align-items: start;
+  margin-bottom: 70px;
+}
+
+.product-large-image-card {
+  background: #f4f0e5;
+  border: 1px solid #e5ded0;
+  border-radius: 18px;
+  padding: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+  position: relative;
+}
+
+.product-main-showcase-img {
+  max-height: 340px;
+  width: auto;
+  object-fit: contain;
+}
+
+.product-corner-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #faf2df;
+  color: #8f7236;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.product-display-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 3.8vw, 42px);
+  color: var(--tea-forest);
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+
+.product-display-title span {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #7a8c7e;
+  display: block;
+  margin-top: 4px;
+}
+
+.product-display-desc {
+  font-size: 15px;
+  color: #526355;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.product-display-price {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--tea-forest);
+  margin-bottom: 24px;
+}
+
+.product-pack-size-row {
+  margin-bottom: 24px;
+}
+
+.product-option-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #627364;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.pack-size-pills {
+  display: flex;
+  gap: 10px;
+}
+
+.pack-size-pill {
+  background: #ffffff;
+  border: 1.5px solid #d5cec0;
+  border-radius: 20px;
+  padding: 7px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #324335;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pack-size-pill.active {
+  border-color: var(--tea-forest);
+  background: var(--tea-forest);
+  color: #ffffff;
+}
+
+.product-purchase-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.product-qty-stepper {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #d5cec0;
+  border-radius: 24px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.product-qty-stepper button {
+  background: transparent;
+  border: none;
+  width: 38px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--tea-forest);
+}
+
+.qty-number {
+  padding: 0 14px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--tea-forest);
+}
+
+.product-add-to-cart-btn {
+  background: var(--tea-forest);
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  padding: 13px 34px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.product-add-to-cart-btn:hover {
+  background: var(--tea-forest-hover);
+}
+
+.product-add-to-cart-btn.added {
+  background: #2f5a38;
+}
+
+.product-trust-badges-row {
+  display: flex;
+  gap: 24px;
+  border-top: 1px solid #e7e2d6;
+  padding-top: 20px;
+  flex-wrap: wrap;
+}
+
+.trust-badge-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #526655;
+}
+
+.product-tabs-section {
+  border-top: 1px solid #e4ded1;
+  padding-top: 40px;
+}
+
+.product-tabs-header {
+  display: flex;
+  gap: 28px;
+  border-bottom: 2px solid #e7e1d5;
+  margin-bottom: 30px;
+}
+
+.product-tab-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #728275;
+  padding: 10px 0 14px;
+  cursor: pointer;
+  position: relative;
+}
+
+.product-tab-btn.active {
+  color: var(--tea-forest);
+  font-weight: 700;
+}
+
+.product-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--tea-forest);
+}
+
+.product-tab-content-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 45px;
+  align-items: center;
+}
+
+.tab-text-side .tab-main-paragraph {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #374739;
+  margin-bottom: 16px;
+}
+
+.tab-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tab-bullet-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #556858;
+}
+
+.bullet-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tea-forest);
+}
+
+.tab-sub-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #637365;
+}
+
+.brewing-guide-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #f2eee3;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e5dfd2;
+}
+
+.brew-spec {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #3e5041;
+}
+
+.tab-cup-image-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  height: 250px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+.tab-cup-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================================
+   PANEL 5: TEA JOURNEY
+========================================= */
+
+.journey-page-wrap {
+  background: var(--tea-cream-bg);
+  padding-bottom: 90px;
+}
+
+.journey-hero-banner {
+  position: relative;
+  height: 290px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.journey-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.journey-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.journey-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20, 42, 26, 0.8) 0%, rgba(20, 42, 26, 0.35) 65%, rgba(20, 42, 26, 0.1) 100%);
+}
+
+.journey-hero-text {
+  position: relative;
+  z-index: 2;
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 35px;
+  color: #ffffff;
+}
+
+.journey-hero-text h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 3.8vw, 44px);
+  margin: 0 0 8px;
+}
+
+.journey-hero-text p {
+  font-size: 15px;
+  color: #d6e2d8;
+  margin: 0;
+}
+
+.journey-steps-section {
+  max-width: 1200px;
+  margin: 55px auto 65px;
+  padding: 0 35px;
+}
+
+.steps-flow-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 15px;
+}
+
+.step-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.step-circle-btn {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #e0d8c7;
+  padding: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.step-circle-btn:hover {
+  transform: scale(1.05);
+  border-color: var(--tea-forest);
+}
+
+.step-circle-btn.active {
+  border-color: var(--tea-forest);
+  box-shadow: 0 0 0 4px rgba(30, 59, 38, 0.2);
+}
+
+.step-circle-img-wrap {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.step-circle-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.step-circle-label {
+  margin-top: 10px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tea-forest);
+  text-align: center;
+}
+
+.step-arrow-connector {
+  position: absolute;
+  right: -28px;
+  top: 38px;
+  font-size: 20px;
+  color: #92a495;
+  pointer-events: none;
+}
+
+.selected-step-detail-card {
+  background: #f1ede1;
+  border: 1px solid #dfd8c8;
+  border-radius: 18px;
+  padding: 28px 32px;
+  margin-top: 35px;
+}
+
+.step-detail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tea-forest);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.selected-step-detail-card h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  color: var(--tea-forest);
+  margin: 0 0 8px;
+}
+
+.selected-step-detail-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #4e5f51;
+  margin: 0;
+}
+
+.journey-trace-feature-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 35px;
+}
+
+.trace-feature-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 30px;
+  align-items: center;
+}
+
+.trace-qr-card {
+  background: #f2eee3;
+  border: 1px solid #ded6c5;
+  border-radius: 18px;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.trace-qr-graphic {
+  padding: 14px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #dcd4c3;
+  flex-shrink: 0;
+}
+
+.trace-qr-info h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  color: var(--tea-forest);
+  margin: 0 0 6px;
+}
+
+.trace-qr-info p {
+  font-size: 13px;
+  color: #586b5b;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.trace-cup-img-wrap {
+  border-radius: 18px;
+  overflow: hidden;
+  height: 260px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.trace-cup-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================================
+   PANEL 6: CONTACT
+========================================= */
+
+.contact-page-wrap {
+  background: var(--tea-cream-bg);
+  padding-bottom: 90px;
+}
+
+.contact-hero-banner {
+  position: relative;
+  height: 290px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.contact-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.contact-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contact-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20, 42, 26, 0.82) 0%, rgba(20, 42, 26, 0.35) 65%, rgba(20, 42, 26, 0.1) 100%);
+}
+
+.contact-hero-text {
+  position: relative;
+  z-index: 2;
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 35px;
+  color: #ffffff;
+}
+
+.contact-hero-text h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 3.8vw, 44px);
+  margin: 0 0 8px;
+}
+
+.contact-hero-text p {
+  font-size: 15px;
+  color: #d6e2d8;
+  margin: 0;
+}
+
+.contact-main-section {
+  max-width: 1180px;
+  margin: 55px auto 0;
+  padding: 0 35px;
+}
+
+.contact-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 55px;
+  align-items: start;
+}
+
+.contact-info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contact-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  color: #2e4032;
+}
+
+.contact-detail-row a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-detail-row a:hover {
+  color: var(--tea-forest);
+  text-decoration: underline;
+}
+
+.contact-icon-bubble {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #ede8dc;
+  color: var(--tea-forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-social-pills {
+  display: flex;
+  gap: 10px;
+}
+
+.contact-social-pills a {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #d8d0c2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tea-forest);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.contact-social-pills a:hover {
+  background: var(--tea-forest);
+  color: #ffffff;
+  border-color: var(--tea-forest);
+}
+
+.contact-estate-image-box {
+  border-radius: 16px;
+  overflow: hidden;
+  height: 210px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+.contact-estate-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contact-card-box {
+  background: #f5f2e8;
+  border: 1px solid #ded6c5;
+  border-radius: 18px;
+  padding: 36px 32px;
+}
+
+.contact-actual-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-field-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4f6152;
+}
+
+.contact-field-group input,
+.contact-field-group textarea {
+  background: #ffffff;
+  border: 1px solid #d5cec0;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 13px;
+  color: #233326;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contact-field-group input:focus,
+.contact-field-group textarea:focus {
+  border-color: var(--tea-forest);
+  box-shadow: 0 0 0 2px rgba(30, 59, 38, 0.1);
+}
+
+.contact-submit-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 13px;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.contact-submitted-state {
+  text-align: center;
+  padding: 25px 10px;
+}
+
+.submitted-check-icon {
+  margin-bottom: 15px;
+}
+
+.contact-submitted-state h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  color: var(--tea-forest);
+  margin-bottom: 10px;
+}
+
+.contact-submitted-state p {
+  font-size: 14px;
+  color: #556658;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   RESPONSIVE MEDIA QUERIES (STOREFRONT)
+========================================= */
+
+@media (max-width: 1100px) {
+  .collection-products-grid,
+  .featured-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .home-hero-grid,
+  .estate-story-block,
+  .product-hero-layout,
+  .product-tab-content-grid,
+  .trace-feature-grid,
+  .contact-split-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .estate-story-block.reverse {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .value-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .collection-products-grid,
+  .featured-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps-flow-container {
+    justify-content: flex-start;
+  }
+
+  .step-arrow-connector {
+    right: -20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav-links {
+    display: none;
+    position: absolute;
+    top: 76px;
+    left: 0;
+    right: 0;
+    background: #fcfbfa;
+    border-bottom: 1px solid #ebe5da;
+    flex-direction: column;
+    padding: 20px 35px;
+    gap: 16px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .navbar-nav-links.open {
+    display: flex;
+  }
+
+  .navbar-shop-tea-btn {
+    display: none;
+  }
+
+  .navbar-mobile-toggle {
+    display: block;
+  }
+
+  .hero-scenic-img {
+    height: 300px;
+  }
+
+  .hero-teacup-float {
+    width: 140px;
+    height: 140px;
+    bottom: -15px;
+    right: -10px;
+  }
+
+  .collection-products-grid,
+  .featured-products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .collection-controls-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-links-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+}
+
