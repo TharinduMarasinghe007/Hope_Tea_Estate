@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -7,7 +7,10 @@ import {
   ShieldCheck,
   ShoppingBag,
   MapPin,
+  User,
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import GoogleSignInButton from "../components/auth/GoogleSignInButton";
 import {
   getStoredSettings,
   getStoredPromotions,
@@ -19,6 +22,7 @@ import {
 const CART_KEY = "hopeTeaCart";
 
 function Checkout() {
+  const { currentUser, isAuthenticated, logout } = useAuth();
   const [settings] = useState(getStoredSettings);
   const [promotions] = useState(getStoredPromotions);
 
@@ -37,10 +41,26 @@ function Checkout() {
     email: "",
     phone: "",
     address: "",
-    city: "",
+    city: "Colombo",
     postalCode: "",
     notes: "",
   });
+
+  // Pre-fill form from authenticated user account
+  useEffect(() => {
+    if (currentUser) {
+      setForm((curr) => ({
+        ...curr,
+        firstName: curr.firstName || currentUser.firstName || "",
+        lastName: curr.lastName || currentUser.lastName || "",
+        email: currentUser.email || curr.email || "",
+        phone: curr.phone || currentUser.phone || "",
+        address: curr.address || currentUser.address || "",
+        city: curr.city || currentUser.city || "Colombo",
+        postalCode: curr.postalCode || currentUser.postalCode || "",
+      }));
+    }
+  }, [currentUser]);
 
   const [errors, setErrors] = useState({});
   const [order, setOrder] = useState(null);
@@ -155,6 +175,11 @@ function Checkout() {
   const placeOrder = (event) => {
     event.preventDefault();
 
+    if (!isAuthenticated) {
+      alert("Please sign in or create an account before placing your order.");
+      return;
+    }
+
     if (!validateForm()) return;
     if (cart.length === 0) return;
 
@@ -162,7 +187,11 @@ function Checkout() {
 
     const newOrder = {
       orderNumber,
-      customer: { ...form },
+      userId: currentUser?.id || null,
+      customer: {
+        ...form,
+        email: currentUser?.email || form.email,
+      },
       items: [...cart],
       subtotal,
       delivery: deliveryFee,
@@ -290,6 +319,81 @@ function Checkout() {
 
       <form onSubmit={placeOrder} className="checkout-layout">
         <section className="checkout-form-section">
+          {/* Account Authentication Gate */}
+          {!isAuthenticated ? (
+            <div className="checkout-auth-gate-card">
+              <div className="checkout-gate-header">
+                <div className="checkout-gate-icon">
+                  <User size={22} />
+                </div>
+                <div>
+                  <span className="checkout-gate-eyebrow">ESTATE ACCOUNT REQUIRED</span>
+                  <h3>Please Sign In or Register to Place Order</h3>
+                </div>
+              </div>
+
+              <p className="checkout-gate-desc">
+                Hope Tea Estate requires customer authentication to confirm your delivery details, track your highland tea batch, and issue verified order receipts.
+              </p>
+
+              <div className="checkout-gate-social-row">
+                <GoogleSignInButton text="One-Click Sign In with Google" />
+              </div>
+
+              <div className="checkout-gate-divider">
+                <span>or continue with email</span>
+              </div>
+
+              <div className="checkout-gate-actions-row">
+                <Link
+                  to="/login?redirect=/checkout"
+                  className="btn-primary-pill"
+                >
+                  Sign In to Account
+                </Link>
+                <Link
+                  to="/register?redirect=/checkout"
+                  className="btn-secondary-pill"
+                >
+                  Create New Account
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="checkout-signed-in-card">
+              <div className="signed-in-user-flex">
+                {currentUser?.avatar ? (
+                  <img
+                    src={currentUser.avatar}
+                    alt={currentUser.firstName}
+                    className="signed-in-avatar-img"
+                  />
+                ) : (
+                  <span className="signed-in-avatar-badge">
+                    {(currentUser?.firstName || "U")[0]}
+                  </span>
+                )}
+                <div>
+                  <span className="signed-in-tag">
+                    ✓ VERIFIED CUSTOMER ACCOUNT
+                  </span>
+                  <strong>
+                    {currentUser?.firstName} {currentUser?.lastName} (
+                    {currentUser?.email})
+                  </strong>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={logout}
+                className="checkout-switch-btn"
+                title="Switch Account"
+              >
+                Switch Account
+              </button>
+            </div>
+          )}
+
           {/* Contact Details */}
           <div className="checkout-group">
             <div className="checkout-heading">
@@ -546,9 +650,18 @@ function Checkout() {
             </p>
           )}
 
-          <button type="submit" className="checkout-place-button">
-            CONFIRM ORDER <ArrowRight size={17} />
-          </button>
+          {!isAuthenticated ? (
+            <Link
+              to="/login?redirect=/checkout"
+              className="checkout-place-button checkout-auth-req-btn"
+            >
+              SIGN IN TO PLACE ORDER <ArrowRight size={17} />
+            </Link>
+          ) : (
+            <button type="submit" className="checkout-place-button">
+              CONFIRM ORDER <ArrowRight size={17} />
+            </button>
+          )}
 
           <Link to="/cart" className="checkout-back-link">
             <ArrowLeft size={15} /> Return to shopping bag

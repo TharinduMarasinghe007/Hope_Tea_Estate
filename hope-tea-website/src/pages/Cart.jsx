@@ -10,7 +10,9 @@ import {
   Trash2,
   Leaf,
   ShieldCheck,
+  User,
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const CART_KEY = "hopeTeaCart";
 

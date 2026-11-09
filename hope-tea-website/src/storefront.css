@@ -82,6 +82,18 @@ body {
   border-bottom: 1px solid #ebe5da;
   z-index: 1000;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              backdrop-filter 0.3s ease;
+}
+
+.site-navbar.scrolled {
+  background: rgba(252, 251, 250, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 6px 24px rgba(24, 46, 30, 0.08);
+  border-bottom-color: rgba(230, 224, 211, 0.7);
 }
 
 .navbar-inner {
@@ -133,11 +145,28 @@ body {
   text-decoration: none;
   padding: 8px 0;
   position: relative;
-  transition: color 0.2s ease;
+  transition: color 0.22s ease;
+}
+
+.nav-item-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--tea-forest);
+  border-radius: 2px;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nav-item-link:hover {
   color: var(--tea-forest);
+}
+
+.nav-item-link:hover::after,
+.nav-item-link.active::after {
+  width: 100%;
 }
 
 .nav-item-link.active {
@@ -145,21 +174,10 @@ body {
   font-weight: 700;
 }
 
-.nav-item-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--tea-forest);
-  border-radius: 2px;
-}
-
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 
 .navbar-cart-btn {
@@ -168,6 +186,11 @@ body {
   display: flex;
   align-items: center;
   padding: 6px;
+  transition: transform 0.2s ease;
+}
+
+.navbar-cart-btn:hover {
+  transform: scale(1.08);
 }
 
 .navbar-cart-badge {
@@ -184,6 +207,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s ease;
 }
 
 .navbar-shop-tea-btn {
@@ -201,6 +225,7 @@ body {
 .navbar-shop-tea-btn:hover {
   background: var(--tea-forest-hover);
   transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(30, 59, 38, 0.2);
 }
 
 .navbar-mobile-toggle {
@@ -408,12 +433,17 @@ body {
   border-radius: 16px;
   padding: 32px 28px;
   text-align: center;
-  transition: all 0.25s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease,
+              background-color 0.28s ease;
 }
 
 .value-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(30, 59, 38, 0.06);
+  transform: translateY(-6px);
+  background: #fdfbf7;
+  box-shadow: 0 14px 30px rgba(30, 59, 38, 0.08);
+  border-color: #d1c8b8;
 }
 
 .value-card-icon {
@@ -426,6 +456,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease,
+              color 0.3s ease;
+}
+
+.value-card:hover .value-card-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: var(--tea-forest);
+  color: #ffffff;
 }
 
 .value-card h3 {
@@ -481,15 +520,17 @@ body {
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  transition: all 0.25s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease;
   display: flex;
   flex-direction: column;
 }
 
 .featured-tea-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(30, 59, 38, 0.08);
-  border-color: #c4d6c7;
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(30, 59, 38, 0.12);
+  border-color: #b8ccbb;
 }
 
 .featured-tea-img-wrap {
@@ -500,17 +541,22 @@ body {
   justify-content: center;
   padding: 20px;
   overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.featured-tea-card:hover .featured-tea-img-wrap {
+  background: #ede7da;
 }
 
 .featured-tea-img-wrap img {
   max-height: 170px;
   width: auto;
   object-fit: contain;
-  transition: transform 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .featured-tea-card:hover img {
-  transform: scale(1.04);
+  transform: scale(1.08);
 }
 
 .featured-tea-info {
@@ -676,12 +722,24 @@ body {
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   height: 330px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-rounded-image:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(24, 46, 30, 0.14);
 }
 
 .story-rounded-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-rounded-image:hover img {
+  transform: scale(1.05);
 }
 
 /* =========================================
@@ -832,13 +890,15 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all 0.25s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease;
 }
 
 .tea-product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(30, 59, 38, 0.08);
-  border-color: #c5d6c8;
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(30, 59, 38, 0.12);
+  border-color: #b8ccbb;
 }
 
 .tea-card-image-box {
@@ -850,17 +910,22 @@ body {
   padding: 20px;
   overflow: hidden;
   text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.tea-product-card:hover .tea-card-image-box {
+  background: #ede7da;
 }
 
 .tea-card-image-box img {
   max-height: 170px;
   width: auto;
   object-fit: contain;
-  transition: transform 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tea-product-card:hover img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .tea-card-details {
@@ -908,11 +973,17 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tea-card-view-btn:hover {
   background: var(--tea-forest-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 59, 38, 0.22);
+}
+
+.tea-card-view-btn:active {
+  transform: scale(0.98);
 }
 
 /* =========================================
@@ -1325,17 +1396,33 @@ body {
   padding: 3px;
   background: #ffffff;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
 }
 
 .step-circle-btn:hover {
-  transform: scale(1.05);
+  transform: scale(1.06);
   border-color: var(--tea-forest);
+  box-shadow: 0 6px 18px rgba(30, 59, 38, 0.15);
 }
 
 .step-circle-btn.active {
   border-color: var(--tea-forest);
-  box-shadow: 0 0 0 4px rgba(30, 59, 38, 0.2);
+  box-shadow: 0 0 0 4px rgba(30, 59, 38, 0.25);
+  animation: stepRingPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes stepRingPulse {
+  0% {
+    box-shadow: 0 0 0 3px rgba(30, 59, 38, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(30, 59, 38, 0.08);
+  }
+  100% {
+    box-shadow: 0 0 0 3px rgba(30, 59, 38, 0.3);
+  }
 }
 
 .step-circle-img-wrap {
@@ -1789,4 +1876,85 @@ body {
     gap: 14px;
   }
 }
+
+/* =========================================
+   PAGE TRANSITIONS & ROUTE LOADER
+========================================= */
+
+.page-top-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #c49646 0%, #2e603a 50%, #c49646 100%);
+  background-size: 200% 100%;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+
+.page-top-loader.active {
+  opacity: 1;
+  width: 82%;
+  animation: pageLoaderShimmer 1.1s infinite linear;
+}
+
+@keyframes pageLoaderShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.page-transition-content {
+  min-height: calc(100vh - 280px);
+  will-change: opacity, transform;
+}
+
+.page-transition-content.fade-in {
+  animation: pageFadeIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.page-transition-content.fade-out {
+  opacity: 0.35;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+@keyframes pageFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cart badge bounce animation */
+.navbar-cart-badge.bounce {
+  animation: badgeBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes badgeBounce {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.4);
+  }
+  75% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
 

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import BrandLogo from "./BrandLogo";
 
+const currentYear = new Date().getFullYear();
+
 function Footer() {
   const links = [
     { name: "Home", path: "/" },
@@ -82,13 +84,11 @@ function Footer() {
       </div>
 
       <div className="footer-bottom-line">
-        <p>© {new Date().getFullYear()} Hope Tea Estate · Hewaheta, Sri Lanka. All rights reserved.</p>
+        <p>© {currentYear} Hope Tea Estate · Hewaheta, Sri Lanka. All rights reserved.</p>
         <div className="footer-legal-links">
           <Link to="/about">Our Estate</Link>
           <span>·</span>
           <Link to="/collection">Tea Shop</Link>
-          <span>·</span>
-          <Link to="/admin">Admin Portal</Link>
         </div>
       </div>
     </footer>
