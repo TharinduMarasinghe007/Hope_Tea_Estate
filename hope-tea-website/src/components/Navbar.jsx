@@ -55,9 +55,12 @@ function Navbar() {
 
   // Reset navbar visibility on route change
   useEffect(() => {
-    setNavVisible(true);
-    setScrolled(window.scrollY > 20);
-    lastScrollY.current = window.scrollY;
+    const timer = setTimeout(() => {
+      setNavVisible(true);
+      setScrolled(window.scrollY > 20);
+      lastScrollY.current = window.scrollY;
+    }, 0);
+    return () => clearTimeout(timer);
   }, [location.pathname]);
 
   // Hide on scroll down, show on scroll up
