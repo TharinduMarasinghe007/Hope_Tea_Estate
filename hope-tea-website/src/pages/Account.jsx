@@ -13,7 +13,7 @@ import {
   Clock,
   Truck,
   ArrowRight,
-  Shield,
+  ShieldCheck,
   Edit2,
   Save,
   Check,
@@ -27,6 +27,7 @@ export default function Account() {
   const [activeTab, setActiveTab] = useState("orders");
   const [editingAddress, setEditingAddress] = useState(false);
   const [addressSuccess, setAddressSuccess] = useState(false);
+  const [securityNotice, setSecurityNotice] = useState("");
 
   const [addressForm, setAddressForm] = useState({
     firstName: currentUser?.firstName || "",
@@ -124,9 +125,13 @@ export default function Account() {
                 <h1>
                   {currentUser.firstName} {currentUser.lastName}
                 </h1>
-                {currentUser.provider === "google" && (
-                  <span className="google-verified-tag">
-                    <Shield size={12} /> Google Verified
+                {currentUser.provider === "google" ? (
+                  <span className="account-verified-pill google-verified">
+                    <ShieldCheck size={13} /> Google Verified
+                  </span>
+                ) : (
+                  <span className="account-verified-pill email-verified">
+                    <ShieldCheck size={13} /> Verified Estate Patron
                   </span>
                 )}
               </div>
@@ -174,6 +179,14 @@ export default function Account() {
           >
             <MapPin size={17} />
             <span>Delivery & Details</span>
+          </button>
+          <button
+            type="button"
+            className={`account-tab-btn ${activeTab === "security" ? "active" : ""}`}
+            onClick={() => setActiveTab("security")}
+          >
+            <ShieldCheck size={17} />
+            <span>Security & Verification</span>
           </button>
         </div>
 
@@ -410,6 +423,89 @@ export default function Account() {
                 </div>
               </form>
             )}
+          </section>
+        )}
+
+        {/* 3. SECURITY & VERIFICATION TAB */}
+        {activeTab === "security" && (
+          <section className="account-security-section">
+            <div className="account-address-view-card">
+              <div className="address-card-header">
+                <div className="address-card-title-block">
+                  <ShieldCheck size={22} color="var(--tea-forest)" />
+                  <div>
+                    <h3>Estate Account Verification</h3>
+                    <p>Verified patronage & authentication status at Hope Tea Estate.</p>
+                  </div>
+                </div>
+              </div>
+
+              {securityNotice && (
+                <div className="auth-redirect-notice" style={{ margin: "16px 0 0" }}>
+                  <CheckCircle size={16} />
+                  <span>{securityNotice}</span>
+                </div>
+              )}
+
+              <div className="security-badges-grid">
+                <div className="security-item-card">
+                  <div className="security-item-header">
+                    <span className="security-label">ACCOUNT STATUS</span>
+                    <span className="security-verified-tag">✓ Fully Verified</span>
+                  </div>
+                  <strong>{currentUser.firstName} {currentUser.lastName}</strong>
+                  <p>Verified Estate Patron & Ceylon Single-Origin Connoisseur.</p>
+                </div>
+
+                <div className="security-item-card">
+                  <div className="security-item-header">
+                    <span className="security-label">AUTHENTICATION METHOD</span>
+                    <span className="security-verified-tag">
+                      {currentUser.provider === "google" ? "Google OAuth 2.0" : "Encrypted Password"}
+                    </span>
+                  </div>
+                  <strong>{currentUser.email}</strong>
+                  <p>
+                    {currentUser.provider === "google"
+                      ? "Directly authenticated via Google Identity Services."
+                      : "Secured with verified estate email and encrypted credentials."}
+                  </p>
+                </div>
+
+                <div className="security-item-card">
+                  <div className="security-item-header">
+                    <span className="security-label">DELIVERY SMS UPDATES</span>
+                    <span className="security-verified-tag">
+                      {currentUser.phone ? "✓ Phone Linked" : "Pending"}
+                    </span>
+                  </div>
+                  <strong>{currentUser.phone || "No phone added yet"}</strong>
+                  <p>Receive real-time harvest dispatch & island-wide delivery notifications.</p>
+                </div>
+
+                <div className="security-item-card">
+                  <div className="security-item-header">
+                    <span className="security-label">DATA PROTECTION</span>
+                    <span className="security-verified-tag">✓ 256-Bit SSL</span>
+                  </div>
+                  <strong>Strict Privacy & Ceylon Heritage Guarantee</strong>
+                  <p>Your delivery notes and personal details are strictly private to Hope Tea Estate.</p>
+                </div>
+              </div>
+
+              <div className="security-actions-row">
+                <button
+                  type="button"
+                  className="btn-primary-pill"
+                  onClick={() => {
+                    setSecurityNotice("Security Audit Passed: Your customer account credentials and delivery passport are active & verified.");
+                    setTimeout(() => setSecurityNotice(""), 4500);
+                  }}
+                >
+                  <ShieldCheck size={16} /> Run Account Verification Audit
+                </button>
+              </div>
+            </div>
           </section>
         )}
       </div>

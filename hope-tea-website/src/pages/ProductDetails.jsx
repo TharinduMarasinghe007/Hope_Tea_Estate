@@ -8,8 +8,11 @@ import {
   Sprout,
   ShieldCheck,
   Check,
+  Award,
+  Sparkles,
 } from "lucide-react";
 import { products } from "../Data/Products";
+import SteepingTimer from "../components/experience/SteepingTimer";
 
 const packSizes = ["50g", "100g", "250g"];
 const tabs = ["Tasting Notes", "Ingredients", "Brewing Guide", "Origin"];
@@ -53,6 +56,16 @@ function ProductDetails() {
 
       localStorage.setItem("hopeTeaCart", JSON.stringify(safeCart));
       window.dispatchEvent(new Event("storage"));
+      window.dispatchEvent(
+        new CustomEvent("tea-cart-added", {
+          detail: {
+            name: `${product.name} (${packSize})`,
+            price: currentPrice,
+            image: product.image,
+            quantity,
+          },
+        })
+      );
       setAdded(true);
       setTimeout(() => setAdded(false), 2500);
     } catch (err) {
@@ -191,6 +204,31 @@ function ProductDetails() {
                   {product.longDescription ||
                     "A rich, well-balanced tea with a smooth flavour and a refreshing aroma."}
                 </p>
+
+                <div className="tab-flavor-metrics">
+                  <span className="metrics-eyebrow">SOMMELIER PALATE PROFILE</span>
+                  <div className="flavor-bar-group">
+                    <div className="f-bar-row">
+                      <span>Body & Depth</span>
+                      <div className="f-track">
+                        <div className="f-fill" style={{ width: product.category === "Green Tea" ? "55%" : "88%" }} />
+                      </div>
+                    </div>
+                    <div className="f-bar-row">
+                      <span>Aroma Intensity</span>
+                      <div className="f-track">
+                        <div className="f-fill" style={{ width: "92%" }} />
+                      </div>
+                    </div>
+                    <div className="f-bar-row">
+                      <span>Briskness</span>
+                      <div className="f-track">
+                        <div className="f-fill" style={{ width: product.category === "Green Tea" ? "70%" : "84%" }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <ul className="tab-bullet-list">
                   {(product.tastingNotes || []).map((note) => (
                     <li key={note}>
@@ -198,6 +236,13 @@ function ProductDetails() {
                     </li>
                   ))}
                 </ul>
+
+                <div className="tea-food-pairing-box">
+                  <Sparkles size={14} />
+                  <span>
+                    <strong>Recommended Food Pairing:</strong> Fresh Ceylon cinnamon pastries, shortbread, or artisanal highland wild honey.
+                  </span>
+                </div>
               </div>
             )}
 
@@ -210,28 +255,21 @@ function ProductDetails() {
                 <p className="tab-sub-text">
                   Grown on the mist-covered mountain slopes of Hewaheta, Sri Lanka, and hand-processed in accordance with classic Ceylon tea standards.
                 </p>
+                <div className="estate-pure-seal">
+                  <Award size={16} />
+                  <span>Guaranteed Single-Origin · Hewaheta Upper Division</span>
+                </div>
               </div>
             )}
 
             {activeTab === "Brewing Guide" && (
               <div>
-                <p className="tab-main-paragraph">
-                  To experience the full character of this harvest, follow our estate brewing guidelines:
-                </p>
-                <div className="brewing-guide-specs">
-                  <div className="brew-spec">
-                    <strong>Water Temperature:</strong>
-                    <span>{product.waterTemperature || "95–100°C"}</span>
-                  </div>
-                  <div className="brew-spec">
-                    <strong>Steeping Time:</strong>
-                    <span>{product.brewingTime || "3–5 minutes"}</span>
-                  </div>
-                  <div className="brew-spec">
-                    <strong>Measurement:</strong>
-                    <span>2.5g (approx. 1 heaping teaspoon) per 220ml cup</span>
-                  </div>
-                </div>
+                <SteepingTimer
+                  teaName={product.name}
+                  defaultMinutes={product.category === "Green Tea" ? 2 : 3}
+                  temperature={product.category === "Green Tea" ? "80°C" : "95°C"}
+                  leafRatio="2.5g (approx. 1 heaping tsp) / 220ml"
+                />
               </div>
             )}
 

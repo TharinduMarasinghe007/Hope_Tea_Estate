@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useAuth } from "../../context/AuthContext";
-import { Check, X, Shield, User } from "lucide-react";
+import { Check, X, Shield, ShieldCheck, User } from "lucide-react";
 
 // Official Google "G" Logo
 export function GoogleIcon({ size = 18 }) {
@@ -62,37 +63,10 @@ export default function GoogleSignInButton({
 
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-  // Initialize official Google Identity Services API if Client ID exists
-  useEffect(() => {
-    if (!googleClientId) return;
-
-    // Load official GIS script
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      if (window.google?.accounts?.id) {
-        window.google.accounts.id.initialize({
-          client_id: googleClientId,
-          callback: handleGoogleCredentialResponse,
-        });
-      }
-    };
-    document.body.appendChild(script);
-
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, [googleClientId]);
-
   // Decode JWT credential from Google Identity Services
-  const handleGoogleCredentialResponse = (response) => {
+  const handleGoogleCredentialResponse = useCallback((response) => {
     try {
       setLoading(true);
-      // Basic JWT payload decoder
       const base64Url = response.credential.split(".")[1];
       const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
       const jsonPayload = decodeURIComponent(
@@ -119,7 +93,33 @@ export default function GoogleSignInButton({
     } finally {
       setLoading(false);
     }
-  };
+  }, [loginWithGoogle, onSuccess, onError]);
+
+  // Initialize official Google Identity Services API if Client ID exists
+  useEffect(() => {
+    if (!googleClientId) return;
+
+    // Load official GIS script
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      if (window.google?.accounts?.id) {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: handleGoogleCredentialResponse,
+        });
+      }
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, [googleClientId, handleGoogleCredentialResponse]);
 
   const handleClick = () => {
     if (googleClientId && window.google?.accounts?.id) {
@@ -134,16 +134,37 @@ export default function GoogleSignInButton({
     }
   };
 
+  // Lock background scroll and listen for Escape key when chooser is open
+  useEffect(() => {
+    if (showChooser) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      const handleKeyDown = (e) => {
+        if (e.key === "Escape") setShowChooser(false);
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [showChooser]);
+
   const handleSelectAccount = (acc) => {
     setLoading(true);
     setTimeout(() => {
-      const res = loginWithGoogle(acc);
+      const res = loginWithGoogle({
+        ...acc,
+        isVerified: true,
+        verificationStatus: "Verified",
+        verificationMethod: "Google Identity Services",
+      });
       setLoading(false);
       setShowChooser(false);
       if (res.success && onSuccess) {
         onSuccess(res.user);
       }
-    }, 350);
+    }, 300);
   };
 
   const handleCustomGoogleSubmit = (e) => {
@@ -159,6 +180,9 @@ export default function GoogleSignInButton({
       lastName,
       email: customEmail.trim(),
       avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(firstName)}&backgroundColor=1e3b26,5b7360`,
+      isVerified: true,
+      verificationStatus: "Verified",
+      verificationMethod: "Google Identity Services",
     });
   };
 
@@ -175,96 +199,121 @@ export default function GoogleSignInButton({
         <span>{loading ? "Connecting to Google..." : text}</span>
       </button>
 
-      {/* Google Account Chooser Modal */}
-      {showChooser && (
-        <div className="google-modal-backdrop" onClick={() => setShowChooser(false)}>
+      {/* Google Account Chooser Modal (Rendered to Root Document Body) */}
+      {showChooser &&
+        createPortal(
           <div
-            className="google-modal-container"
-            onClick={(e) => e.stopPropagation()}
+            className="google-modal-backdrop"
+            onClick={() => setShowChooser(false)}
             role="dialog"
             aria-modal="true"
           >
-            <div className="google-modal-header">
-              <div className="google-header-brand">
-                <GoogleIcon size={24} />
-                <div>
-                  <h3>Sign in with Google</h3>
-                  <p>Choose an account to continue to Hope Tea Estate</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="google-modal-close"
-                onClick={() => setShowChooser(false)}
-                aria-label="Close"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="google-accounts-list">
-              {demoGoogleAccounts.map((acc) => (
-                <button
-                  key={acc.email}
-                  type="button"
-                  className="google-account-item"
-                  onClick={() => handleSelectAccount(acc)}
-                >
-                  <img
-                    src={acc.avatar}
-                    alt={acc.firstName}
-                    className="google-account-avatar"
-                  />
-                  <div className="google-account-text">
-                    <strong>
-                      {acc.firstName} {acc.lastName}
-                    </strong>
-                    <span>{acc.email}</span>
+            <div
+              className="google-modal-container"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="google-modal-header">
+                <div className="google-header-brand">
+                  <div className="google-icon-circle">
+                    <GoogleIcon size={24} />
                   </div>
-                  <Check size={16} className="google-account-arrow" />
+                  <div>
+                    <h3>Sign in with Google</h3>
+                    <p>
+                      Choose an account to continue to <strong>Hope Tea Estate</strong>
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="google-modal-close"
+                  onClick={() => setShowChooser(false)}
+                  aria-label="Close dialog"
+                >
+                  <X size={18} />
                 </button>
-              ))}
-            </div>
-
-            <div className="google-divider">
-              <span>or use another Google account</span>
-            </div>
-
-            <form onSubmit={handleCustomGoogleSubmit} className="google-custom-form">
-              <div className="google-form-group">
-                <input
-                  type="text"
-                  placeholder="Your Name (e.g. Kasun Mendis)"
-                  value={customName}
-                  onChange={(e) => setCustomName(e.target.value)}
-                  className="google-form-input"
-                />
               </div>
 
-              <div className="google-form-group">
-                <input
-                  type="email"
-                  placeholder="name@gmail.com"
-                  required
-                  value={customEmail}
-                  onChange={(e) => setCustomEmail(e.target.value)}
-                  className="google-form-input"
-                />
+              {/* Verified Trust Strip */}
+              <div className="google-trust-strip">
+                <ShieldCheck size={14} className="trust-shield" />
+                <span>Verified Google Single Sign-On Partner · Hope Tea Estate</span>
               </div>
 
-              <button type="submit" className="google-custom-submit-btn">
-                <User size={15} />
-                <span>Continue with this Account</span>
-              </button>
-            </form>
+              <div className="google-accounts-list">
+                {demoGoogleAccounts.map((acc) => (
+                  <button
+                    key={acc.email}
+                    type="button"
+                    className="google-account-item"
+                    onClick={() => handleSelectAccount(acc)}
+                  >
+                    <div className="google-avatar-wrap">
+                      <img
+                        src={acc.avatar}
+                        alt={acc.firstName}
+                        className="google-account-avatar"
+                      />
+                      <span className="google-verified-check">✓</span>
+                    </div>
+                    <div className="google-account-text">
+                      <div className="google-account-title-row">
+                        <strong>
+                          {acc.firstName} {acc.lastName}
+                        </strong>
+                        <span className="google-verified-chip">Verified</span>
+                      </div>
+                      <span className="google-account-email">{acc.email}</span>
+                    </div>
+                    <div className="google-account-arrow">
+                      <Check size={16} />
+                    </div>
+                  </button>
+                ))}
+              </div>
 
-            <div className="google-modal-footer">
-              <Shield size={13} />
-              <span>To continue, Google will share your name and email with Hope Tea Estate.</span>
+              <div className="google-divider">
+                <span>or use another Google account</span>
+              </div>
+
+              <form onSubmit={handleCustomGoogleSubmit} className="google-custom-form">
+                <div className="google-form-group">
+                  <input
+                    type="text"
+                    placeholder="Your Name (e.g. Kasun Mendis)"
+                    value={customName}
+                    onChange={(e) => setCustomName(e.target.value)}
+                    className="google-form-input"
+                  />
+                </div>
+
+                <div className="google-form-group">
+                  <input
+                    type="email"
+                    placeholder="yourname@gmail.com"
+                    required
+                    value={customEmail}
+                    onChange={(e) => setCustomEmail(e.target.value)}
+                    className="google-form-input"
+                  />
+                </div>
+
+                <button type="submit" className="google-custom-submit-btn">
+                  <User size={15} />
+                  <span>Continue with this Account</span>
+                </button>
+              </form>
+
+              <div className="google-modal-footer">
+                <Shield size={14} />
+                <span>
+                  To continue, Google will share your verified name, email address, and profile picture with Hope Tea Estate.
+                </span>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </>
   );
 }

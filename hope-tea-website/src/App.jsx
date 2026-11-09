@@ -31,6 +31,7 @@ import WebsiteContent from "./pages/admin/WebsiteContent";
 import Settings from "./pages/admin/Settings";
 
 import PageTransition from "./components/PageTransition";
+import CartToast from "./components/experience/CartToast";
 
 function PublicLayout() {
   return (
@@ -54,6 +55,7 @@ function PublicLayout() {
       </PageTransition>
 
       <Footer />
+      <CartToast />
     </>
   );
 }

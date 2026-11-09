@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Coffee, Mountain } from "lucide-react";
 import { products } from "../Data/Products";
+import TeaSommelier from "../components/experience/TeaSommelier";
 
 function Home() {
   // Take first 4 items for the collection preview in Panel 1
@@ -33,8 +34,8 @@ function Home() {
           <div className="home-hero-visual">
             <div className="hero-scenic-image-wrap">
               <img
-                src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=85&w=1200"
-                alt="Hope Tea Estate Highlands in Hewaheta"
+                src="https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?q=85&w=1200"
+                alt="Cup of tea served with fresh tea leaves"
                 className="hero-scenic-img"
               />
               <div className="hero-teacup-float">
@@ -113,7 +114,12 @@ function Home() {
         </div>
       </section>
 
-      {/* 4. BOTTOM BANNER */}
+      {/* 4. INTERACTIVE TEA SOMMELIER EXPERIENCE */}
+      <section className="home-sommelier-section">
+        <TeaSommelier />
+      </section>
+
+      {/* 5. BOTTOM BANNER */}
       <section className="home-bottom-quote-banner">
         <div className="quote-banner-overlay" />
         <div className="quote-banner-content">

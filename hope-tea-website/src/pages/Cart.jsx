@@ -29,6 +29,7 @@ function readCart() {
 }
 
 function Cart() {
+  const { isAuthenticated } = useAuth();
   const [cart, setCart] = useState(readCart);
 
   const saveCart = (updatedCart) => {
@@ -214,6 +215,13 @@ function Cart() {
               PROCEED TO CHECKOUT
               <ArrowRight size={17} />
             </Link>
+
+            {!isAuthenticated && (
+              <p className="cart-auth-hint" style={{ fontSize: "11px", color: "#6a7b6d", margin: "10px 0 0", display: "flex", alignItems: "center", gap: "6px", lineHeight: "1.4" }}>
+                <User size={13} style={{ color: "#c49646", flexShrink: 0 }} />
+                <span>Account required to order. You can sign in with Google or email at checkout.</span>
+              </p>
+            )}
 
             <div className="cart-secure-note">
               <ShieldCheck size={18} />

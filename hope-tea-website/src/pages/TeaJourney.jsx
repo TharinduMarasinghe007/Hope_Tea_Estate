@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, QrCode, CheckCircle2 } from "lucide-react";
+import { ArrowRight, QrCode, CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
+import BatchTrackerModal from "../components/experience/BatchTrackerModal";
 
 const processSteps = [
   {
@@ -52,6 +53,7 @@ const processSteps = [
 
 function TeaJourney() {
   const [selectedStep, setSelectedStep] = useState(processSteps[0]);
+  const [trackerOpen, setTrackerOpen] = useState(false);
 
   return (
     <main className="journey-page-wrap">
@@ -59,8 +61,8 @@ function TeaJourney() {
       <section className="journey-hero-banner">
         <div className="journey-hero-bg">
           <img
-            src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=1600"
-            alt="Sun-kissed Ceylon tea plantation in Hewaheta"
+            src="https://images.unsplash.com/photo-1563911892437-1feda0179e1b?q=85&w=1600"
+            alt="Loose-leaf teas prepared for a traditional tea service"
             className="journey-hero-img"
           />
           <div className="journey-hero-overlay" />
@@ -108,24 +110,42 @@ function TeaJourney() {
         </div>
       </section>
 
-      {/* 3. "TRACE THE JOURNEY" QR CARD & CUP FEATURE */}
+      {/* 3. "TRACE THE JOURNEY" QR CARD & BATCH EXPLORER */}
       <section className="journey-trace-feature-section">
         <div className="trace-feature-grid">
           {/* Left: QR Card */}
           <div className="trace-qr-card">
-            <div className="trace-qr-graphic">
+            <div
+              className="trace-qr-graphic"
+              onClick={() => setTrackerOpen(true)}
+              style={{ cursor: "pointer" }}
+              title="Click to inspect sample estate batch"
+            >
               <QrCode size={56} color="#1e3b26" />
             </div>
 
             <div className="trace-qr-info">
+              <div className="trace-verified-tag">
+                <Sparkles size={13} />
+                <span>LIVE HIGHLAND PASSPORT</span>
+              </div>
               <h3>Trace the Journey</h3>
               <p>
-                A proposed future feature to view the journey of your tea batch—from plucking date to packing.
+                Experience our single-estate batch traceability. Track harvest dawn conditions, plucking elevation, and master artisan certifications.
               </p>
 
-              <Link to="/about" className="btn-primary-pill trace-btn">
-                Learn More <ArrowRight size={15} />
-              </Link>
+              <div className="trace-actions-row">
+                <button
+                  type="button"
+                  className="btn-primary-pill trace-btn"
+                  onClick={() => setTrackerOpen(true)}
+                >
+                  <ShieldCheck size={16} /> Inspect Batch Passport
+                </button>
+                <Link to="/collection" className="btn-secondary-pill">
+                  Shop Teas <ArrowRight size={15} />
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -140,6 +160,12 @@ function TeaJourney() {
           </div>
         </div>
       </section>
+
+      {/* Interactive Batch Tracker Modal */}
+      <BatchTrackerModal
+        isOpen={trackerOpen}
+        onClose={() => setTrackerOpen(false)}
+      />
     </main>
   );
 }

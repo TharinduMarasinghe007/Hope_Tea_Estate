@@ -8,6 +8,7 @@ import {
   ShoppingBag,
   MapPin,
   User,
+  AlertCircle,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import GoogleSignInButton from "../components/auth/GoogleSignInButton";
@@ -22,9 +23,19 @@ import {
 const CART_KEY = "hopeTeaCart";
 
 function Checkout() {
-  const { currentUser, isAuthenticated, logout } = useAuth();
+  const { currentUser, isAuthenticated, login, register, logout } = useAuth();
   const [settings] = useState(getStoredSettings);
   const [promotions] = useState(getStoredPromotions);
+
+  // Inline checkout sign-in state
+  const [authTab, setAuthTab] = useState("signin"); // "signin" | "register"
+  const [inlineEmail, setInlineEmail] = useState("");
+  const [inlinePassword, setInlinePassword] = useState("");
+  const [inlineFirstName, setInlineFirstName] = useState("");
+  const [inlineLastName, setInlineLastName] = useState("");
+  const [inlinePhone, setInlinePhone] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
 
   const [cart, setCart] = useState(() => {
     try {
@@ -35,32 +46,119 @@ function Checkout() {
     }
   });
 
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "Colombo",
-    postalCode: "",
+  const [form, setForm] = useState(() => ({
+    firstName: currentUser?.firstName || "",
+    lastName: currentUser?.lastName || "",
+    email: currentUser?.email || "",
+    phone: currentUser?.phone || "",
+    address: currentUser?.address || "",
+    city: currentUser?.city || "Colombo",
+    postalCode: currentUser?.postalCode || "",
     notes: "",
-  });
+  }));
 
-  // Pre-fill form from authenticated user account
-  useEffect(() => {
-    if (currentUser) {
-      setForm((curr) => ({
-        ...curr,
-        firstName: curr.firstName || currentUser.firstName || "",
-        lastName: curr.lastName || currentUser.lastName || "",
-        email: currentUser.email || curr.email || "",
-        phone: curr.phone || currentUser.phone || "",
-        address: curr.address || currentUser.address || "",
-        city: curr.city || currentUser.city || "Colombo",
-        postalCode: curr.postalCode || currentUser.postalCode || "",
+  const handleAuthSuccess = (user) => {
+    if (user) {
+      setForm((prev) => ({
+        ...prev,
+        firstName: user.firstName || prev.firstName || "",
+        lastName: user.lastName || prev.lastName || "",
+        email: user.email || prev.email || "",
+        phone: user.phone || prev.phone || "",
+        address: user.address || prev.address || "",
+        city: user.city || prev.city || "Colombo",
+        postalCode: user.postalCode || prev.postalCode || "",
       }));
     }
+  };
+
+  // Keep form in sync if account changes
+  useEffect(() => {
+    if (currentUser) {
+      const timer = setTimeout(() => {
+        setForm((curr) => ({
+          ...curr,
+          firstName: currentUser.firstName || curr.firstName || "",
+          lastName: currentUser.lastName || curr.lastName || "",
+          email: currentUser.email || curr.email || "",
+          phone: currentUser.phone || curr.phone || "",
+          address: currentUser.address || curr.address || "",
+          city: currentUser.city || curr.city || "Colombo",
+          postalCode: currentUser.postalCode || curr.postalCode || "",
+        }));
+      }, 0);
+      return () => clearTimeout(timer);
+    }
   }, [currentUser]);
+
+  const handleInlineSignIn = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    setAuthError("");
+    if (!inlineEmail.trim() || !inlinePassword) {
+      setAuthError("Please enter your email and password.");
+      return;
+    }
+    setAuthLoading(true);
+    setTimeout(() => {
+      const res = login(inlineEmail, inlinePassword);
+      setAuthLoading(false);
+      if (!res.success) {
+        setAuthError(res.error || "Failed to sign in. Please verify your credentials.");
+      } else {
+        handleAuthSuccess(res.user);
+      }
+    }, 200);
+  };
+
+  const handleQuickDemoFill = (demoEmail, demoPass) => {
+    setInlineEmail(demoEmail);
+    setInlinePassword(demoPass);
+    setAuthError("");
+    setAuthLoading(true);
+    setTimeout(() => {
+      const res = login(demoEmail, demoPass);
+      setAuthLoading(false);
+      if (res.success) {
+        handleAuthSuccess(res.user);
+      }
+    }, 200);
+  };
+
+  const handleInlineRegister = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    setAuthError("");
+    if (!inlineFirstName.trim()) {
+      setAuthError("Please provide your first name.");
+      return;
+    }
+    if (!inlineEmail.trim()) {
+      setAuthError("Please enter a valid email address.");
+      return;
+    }
+    if (!inlinePassword || inlinePassword.length < 6) {
+      setAuthError("Password must be at least 6 characters.");
+      return;
+    }
+
+    setAuthLoading(true);
+    setTimeout(() => {
+      const res = register({
+        firstName: inlineFirstName,
+        lastName: inlineLastName,
+        email: inlineEmail,
+        phone: inlinePhone,
+        address: form.address,
+        city: form.city,
+        password: inlinePassword,
+      });
+      setAuthLoading(false);
+      if (!res.success) {
+        setAuthError(res.error || "Failed to create account.");
+      } else {
+        handleAuthSuccess(res.user);
+      }
+    }, 250);
+  };
 
   const [errors, setErrors] = useState({});
   const [order, setOrder] = useState(null);
@@ -176,7 +274,12 @@ function Checkout() {
     event.preventDefault();
 
     if (!isAuthenticated) {
-      alert("Please sign in or create an account before placing your order.");
+      const gate = document.querySelector(".checkout-auth-gate-card");
+      if (gate) {
+        gate.scrollIntoView({ behavior: "smooth", block: "center" });
+        const input = gate.querySelector("input");
+        if (input) input.focus();
+      }
       return;
     }
 
@@ -336,28 +439,181 @@ function Checkout() {
                 Hope Tea Estate requires customer authentication to confirm your delivery details, track your highland tea batch, and issue verified order receipts.
               </p>
 
+              {/* 1. Google 1-Click Sign In */}
               <div className="checkout-gate-social-row">
-                <GoogleSignInButton text="One-Click Sign In with Google" />
+                <GoogleSignInButton
+                  text="One-Click Sign In with Google"
+                  onSuccess={handleAuthSuccess}
+                />
               </div>
 
               <div className="checkout-gate-divider">
-                <span>or continue with email</span>
+                <span>or sign in / register with email</span>
               </div>
 
-              <div className="checkout-gate-actions-row">
-                <Link
-                  to="/login?redirect=/checkout"
-                  className="btn-primary-pill"
+              {/* Tab Selector: Sign In vs Register */}
+              <div className="checkout-gate-tabs">
+                <button
+                  type="button"
+                  className={`gate-tab-btn ${authTab === "signin" ? "active" : ""}`}
+                  onClick={() => {
+                    setAuthTab("signin");
+                    setAuthError("");
+                  }}
                 >
-                  Sign In to Account
-                </Link>
-                <Link
-                  to="/register?redirect=/checkout"
-                  className="btn-secondary-pill"
+                  Sign In to Existing Account
+                </button>
+                <button
+                  type="button"
+                  className={`gate-tab-btn ${authTab === "register" ? "active" : ""}`}
+                  onClick={() => {
+                    setAuthTab("register");
+                    setAuthError("");
+                  }}
                 >
                   Create New Account
-                </Link>
+                </button>
               </div>
+
+              {authError && (
+                <div className="checkout-auth-error-alert" role="alert">
+                  <AlertCircle size={15} />
+                  <span>{authError}</span>
+                </div>
+              )}
+
+              {authTab === "signin" ? (
+                <div className="checkout-inline-form-block">
+                  <div className="checkout-inline-inputs-row">
+                    <div className="checkout-field">
+                      <label>Email Address</label>
+                      <input
+                        type="email"
+                        placeholder="amelia.f@gmail.com"
+                        value={inlineEmail}
+                        onChange={(e) => setInlineEmail(e.target.value)}
+                        className="checkout-auth-input"
+                      />
+                    </div>
+                    <div className="checkout-field">
+                      <label>Password</label>
+                      <input
+                        type="password"
+                        placeholder="••••••••"
+                        value={inlinePassword}
+                        onChange={(e) => setInlinePassword(e.target.value)}
+                        className="checkout-auth-input"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="checkout-inline-actions">
+                    <button
+                      type="button"
+                      disabled={authLoading}
+                      onClick={handleInlineSignIn}
+                      className="btn-primary-pill checkout-inline-submit-btn"
+                    >
+                      {authLoading ? "Signing in..." : "Sign In & Continue"}
+                      <ArrowRight size={15} />
+                    </button>
+                  </div>
+
+                  {/* 1-Click Quick Demo Accounts Strip */}
+                  <div className="checkout-quick-demo-strip">
+                    <span className="quick-demo-label">1-Click Test Sign-In:</span>
+                    <div className="quick-demo-pills">
+                      <button
+                        type="button"
+                        onClick={() => handleQuickDemoFill("amelia.f@gmail.com", "password123")}
+                        className="quick-demo-pill"
+                        title="Click to sign in instantly as Amelia Fernando"
+                      >
+                        ⚡ Amelia F. (Colombo)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickDemoFill("daniel.p@outlook.com", "password123")}
+                        className="quick-demo-pill"
+                        title="Click to sign in instantly as Daniel Perera"
+                      >
+                        ⚡ Daniel P. (Kandy)
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="checkout-inline-form-block">
+                  <div className="checkout-inline-inputs-row">
+                    <div className="checkout-field">
+                      <label>First Name *</label>
+                      <input
+                        type="text"
+                        placeholder="Kasun"
+                        value={inlineFirstName}
+                        onChange={(e) => setInlineFirstName(e.target.value)}
+                        className="checkout-auth-input"
+                      />
+                    </div>
+                    <div className="checkout-field">
+                      <label>Last Name</label>
+                      <input
+                        type="text"
+                        placeholder="Mendis"
+                        value={inlineLastName}
+                        onChange={(e) => setInlineLastName(e.target.value)}
+                        className="checkout-auth-input"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="checkout-inline-inputs-row">
+                    <div className="checkout-field">
+                      <label>Email Address *</label>
+                      <input
+                        type="email"
+                        placeholder="kasun@example.com"
+                        value={inlineEmail}
+                        onChange={(e) => setInlineEmail(e.target.value)}
+                        className="checkout-auth-input"
+                      />
+                    </div>
+                    <div className="checkout-field">
+                      <label>Phone Number</label>
+                      <input
+                        type="tel"
+                        placeholder="+94 77 123 4567"
+                        value={inlinePhone}
+                        onChange={(e) => setInlinePhone(e.target.value)}
+                        className="checkout-auth-input"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="checkout-field" style={{ marginBottom: "14px" }}>
+                    <label>Password (min. 6 characters) *</label>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      value={inlinePassword}
+                      onChange={(e) => setInlinePassword(e.target.value)}
+                      className="checkout-auth-input"
+                    />
+                  </div>
+
+                  <div className="checkout-inline-actions">
+                    <button
+                      type="button"
+                      disabled={authLoading}
+                      onClick={handleInlineRegister}
+                      className="btn-primary-pill checkout-inline-submit-btn"
+                    >
+                      {authLoading ? "Creating account..." : "Register & Continue"}
+                      <ArrowRight size={15} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="checkout-signed-in-card">
@@ -375,7 +631,7 @@ function Checkout() {
                 )}
                 <div>
                   <span className="signed-in-tag">
-                    ✓ VERIFIED CUSTOMER ACCOUNT
+                    <ShieldCheck size={13} /> VERIFIED ESTATE PATRON · {currentUser?.provider === "google" ? "GOOGLE AUTHENTICATED" : "CONFIRMED ACCOUNT"}
                   </span>
                   <strong>
                     {currentUser?.firstName} {currentUser?.lastName} (
@@ -651,12 +907,20 @@ function Checkout() {
           )}
 
           {!isAuthenticated ? (
-            <Link
-              to="/login?redirect=/checkout"
+            <button
+              type="button"
+              onClick={() => {
+                const gate = document.querySelector(".checkout-auth-gate-card");
+                if (gate) {
+                  gate.scrollIntoView({ behavior: "smooth", block: "center" });
+                  const input = gate.querySelector("input");
+                  if (input) input.focus();
+                }
+              }}
               className="checkout-place-button checkout-auth-req-btn"
             >
-              SIGN IN TO PLACE ORDER <ArrowRight size={17} />
-            </Link>
+              SIGN IN TO CONFIRM ORDER <ArrowRight size={17} />
+            </button>
           ) : (
             <button type="submit" className="checkout-place-button">
               CONFIRM ORDER <ArrowRight size={17} />

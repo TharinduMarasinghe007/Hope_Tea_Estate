@@ -8,8 +8,8 @@ function About() {
       <section className="estate-hero-section">
         <div className="estate-hero-image-wrap">
           <img
-            src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=85&w=1600"
-            alt="Hope Tea Estate Highlands in Hewaheta"
+            src="https://images.unsplash.com/photo-1563911892437-1feda0179e1b?q=85&w=1600"
+            alt="Loose-leaf teas prepared for a traditional tea service"
             className="estate-hero-img"
           />
           <div className="estate-hero-curve-mask" />

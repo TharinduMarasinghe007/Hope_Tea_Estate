@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getStoredOrders, saveStoredOrders } from "../Data/adminStorage";
+import { getStoredOrders } from "../Data/adminStorage";
 
 const AuthContext = createContext(null);
 
@@ -19,6 +19,10 @@ const initialUsers = [
     postalCode: "00300",
     password: "password123",
     provider: "email",
+    isVerified: true,
+    verificationStatus: "Verified",
+    verificationMethod: "Estate Customer Verification",
+    tier: "Estate Connoisseur",
     avatar: null,
     createdAt: "2026-10-15T09:00:00.000Z",
   },
@@ -33,6 +37,10 @@ const initialUsers = [
     postalCode: "20000",
     password: "password123",
     provider: "email",
+    isVerified: true,
+    verificationStatus: "Verified",
+    verificationMethod: "Estate Customer Verification",
+    tier: "Estate Connoisseur",
     avatar: null,
     createdAt: "2026-10-20T11:30:00.000Z",
   },
@@ -58,7 +66,14 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem(CURRENT_USER_KEY);
-      return saved ? JSON.parse(saved) : null;
+      if (!saved) return null;
+      const parsed = JSON.parse(saved);
+      return {
+        ...parsed,
+        isVerified: parsed.isVerified ?? true,
+        verificationStatus: parsed.verificationStatus || "Verified",
+        tier: parsed.tier || (parsed.provider === "google" ? "Google Verified Patron" : "Estate Connoisseur"),
+      };
     } catch {
       return null;
     }
@@ -155,6 +170,9 @@ export function AuthProvider({ children }) {
         lastName: googleProfile.lastName || existing.lastName,
         avatar: googleProfile.avatar || existing.avatar,
         provider: "google",
+        isVerified: true,
+        verificationStatus: "Verified",
+        verificationMethod: "Google Identity Services",
       };
       const updatedList = [...users];
       updatedList[existingIndex] = authenticatedUser;
@@ -172,6 +190,10 @@ export function AuthProvider({ children }) {
         postalCode: googleProfile.postalCode || "",
         password: null,
         provider: "google",
+        isVerified: true,
+        verificationStatus: "Verified",
+        verificationMethod: "Google Identity Services",
+        tier: "Estate Patron",
         avatar:
           googleProfile.avatar ||
           "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200",
@@ -210,6 +232,10 @@ export function AuthProvider({ children }) {
       postalCode: (registrationData.postalCode || "").trim(),
       password: registrationData.password,
       provider: "email",
+      isVerified: true,
+      verificationStatus: "Verified",
+      verificationMethod: "Estate Customer Verification",
+      tier: "Estate Patron",
       avatar: null,
       createdAt: new Date().toISOString(),
     };

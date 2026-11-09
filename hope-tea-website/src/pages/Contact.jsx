@@ -38,8 +38,8 @@ function Contact() {
       <section className="contact-hero-banner">
         <div className="contact-hero-bg">
           <img
-            src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=85&w=1600"
-            alt="Sunrise over misty Ceylon tea terraces"
+            src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=85&w=1600"
+            alt="Freshly brewed Ceylon tea in a glass cup"
             className="contact-hero-img"
           />
           <div className="contact-hero-overlay" />
